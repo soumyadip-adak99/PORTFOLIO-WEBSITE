@@ -140,13 +140,13 @@ export const PROJECTS = [
 
     {
         id: 4,
-        title: "Tic Tac Toe game",
+        title: "Personal Expense Tracker",
         description:
-            "Tic Tac Toe Game a basic react project for build under standing the react fundamentals",
+            "Personal Expense Tracker where you can track your daily and monthly expenses and vide the analytics",
         image: PROJECT_IMG_5,
-        tags: ["React", "JavaScript", "css"],
-        liveUrl: "https://tic-tac-toe-12.vercel.app/",
-        githubUrl: "https://github.com/soumyadip-adak99/React_JS/tree/main/Tic-tac-toe",
+        tags: ["React", "JavaScript", "TailwindCss"],
+        liveUrl: "https://financeflow-ebon.vercel.app/",
+        githubUrl: "https://github.com/soumyadip-adak99/PERSONAL_EXPENSE_TRACKER",
         featured: true,
         category: "Web App",
     },
