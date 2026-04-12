@@ -3,6 +3,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Code2, Sun, Moon, X, Menu } from "lucide-react";
 import { FiGithub, FiLinkedin } from "react-icons/fi";
 import { useTheme } from "../context/ThemeContext";
+// import logo from "../assets/logo.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLaptopCode } from "@fortawesome/free-solid-svg-icons";
 
 export default function Navbar() {
     const { isDarkMode, toggleDarkMode } = useTheme();
@@ -63,7 +66,11 @@ export default function Navbar() {
 
     const socialLinks = [
         { icon: FiGithub, href: "https://github.com/soumyadip-adak99", label: "GitHub" },
-        { icon: FiLinkedin, href: "https://www.linkedin.com/in/soumyadip-adak-a19b03281/", label: "LinkedIn" },
+        {
+            icon: FiLinkedin,
+            href: "https://www.linkedin.com/in/soumyadip-adak-a19b03281/",
+            label: "LinkedIn",
+        },
     ];
 
     /* ── Mobile Menu Animation Variants (Clean & Premium) ── */
@@ -127,11 +134,18 @@ export default function Navbar() {
                                 isDarkMode ? "bg-orange-500/10" : "bg-orange-50"
                             }`}
                         >
-                            <Code2 size={24} className="text-orange-500" />
+                            {/* <image scr="" size={24} className="text-orange-500" /> */}
+                            <FontAwesomeIcon
+                                icon={faLaptopCode}
+                                style={{ color: "rgb(248, 142, 45)" }}
+                                className="text-xl"
+                            />
                         </div>
                         <span
                             className={`text-lg font-bold tracking-tight transition-colors duration-300 ${
-                                isDarkMode ? "text-white group-hover:text-orange-400" : "text-gray-900 group-hover:text-orange-500"
+                                isDarkMode
+                                    ? "text-white group-hover:text-orange-400"
+                                    : "text-gray-900 group-hover:text-orange-500"
                             }`}
                         >
                             Time to Code
@@ -151,8 +165,8 @@ export default function Navbar() {
                                             isActive
                                                 ? "text-orange-500"
                                                 : isDarkMode
-                                                ? "text-gray-400 hover:text-white"
-                                                : "text-gray-500 hover:text-gray-900"
+                                                  ? "text-gray-400 hover:text-white"
+                                                  : "text-gray-500 hover:text-gray-900"
                                         }`}
                                 >
                                     {label}
@@ -160,7 +174,11 @@ export default function Navbar() {
                                         <motion.span
                                             layoutId="desktop-active-indicator"
                                             className="absolute -bottom-1 left-0 right-0 h-[2px] bg-orange-500 rounded-full"
-                                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                            transition={{
+                                                type: "spring",
+                                                stiffness: 300,
+                                                damping: 30,
+                                            }}
                                         />
                                     )}
                                 </button>
@@ -226,7 +244,9 @@ export default function Navbar() {
                         animate="visible"
                         exit="exit"
                         className={`fixed inset-0 z-[60] flex flex-col justify-between ${
-                            isDarkMode ? "bg-black/95 backdrop-blur-md" : "bg-white/95 backdrop-blur-md"
+                            isDarkMode
+                                ? "bg-black/95 backdrop-blur-md"
+                                : "bg-white/95 backdrop-blur-md"
                         }`}
                     >
                         {/* Top Right Close Button */}
@@ -265,8 +285,8 @@ export default function Navbar() {
                                                 isActive
                                                     ? "text-orange-500 font-medium"
                                                     : isDarkMode
-                                                    ? "text-gray-400 hover:text-white"
-                                                    : "text-gray-500 hover:text-gray-900"
+                                                      ? "text-gray-400 hover:text-white"
+                                                      : "text-gray-500 hover:text-gray-900"
                                             }`}
                                     >
                                         {label}
