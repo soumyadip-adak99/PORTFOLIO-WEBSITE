@@ -1,468 +1,277 @@
-import { useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown, Mail } from "lucide-react";
-import { FiGithub, FiLinkedin } from "react-icons/fi";
-import { useTheme } from "../../context/ThemeContext";
-import { itemVariants, containerVariants } from "../../utils/helper";
-import PROFILE_PIC from "../../assets/IMG20240214141642.jpg";
-import BL_PROFILE_PIC from "../../assets/black.jpg";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
+import PROFILE_PIC from "../../assets/profile.webp";
+import { scrollToSection } from "../../utils/scrollHelper";
+import ProtectedImage from "../ProtectedImage";
 
-function HeroSection() {
-    const { isDarkMode } = useTheme();
-
-    const { scrollY } = useScroll();
-    const heroY = useTransform(scrollY, [0, 500], [0, -100]);
+export default function HeroSection() {
+    const heroRef = useRef(null);
 
     useEffect(() => {
-        window.scrollTo(0, 0);
-        if (window.location.hash) {
-            window.history.replaceState(null, document.title, window.location.pathname);
-        }
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReducedMotion) return;
+
+        const ctx = gsap.context(() => {
+            const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+            tl.from(".hero-badge", {
+                opacity: 0,
+                y: -15,
+                duration: 0.7,
+                delay: 0.1,
+            })
+                .from(
+                    ".hero-title-line",
+                    {
+                        opacity: 0,
+                        y: 35,
+                        duration: 0.8,
+                        stagger: 0.15,
+                    },
+                    "-=0.4"
+                )
+                .from(
+                    ".hero-description",
+                    {
+                        opacity: 0,
+                        y: 20,
+                        duration: 0.6,
+                    },
+                    "-=0.4"
+                )
+                .from(
+                    ".hero-action-buttons",
+                    {
+                        opacity: 0,
+                        y: 20,
+                        duration: 0.6,
+                    },
+                    "-=0.3"
+                )
+                .from(
+                    ".hero-socials",
+                    {
+                        opacity: 0,
+                        y: 15,
+                        duration: 0.5,
+                        stagger: 0.08,
+                    },
+                    "-=0.3"
+                )
+                .from(
+                    ".hero-card-container",
+                    {
+                        opacity: 0,
+                        scale: 0.94,
+                        duration: 0.9,
+                    },
+                    "-=0.8"
+                )
+                .from(
+                    ".hero-orbit-system",
+                    {
+                        opacity: 0,
+                        scale: 0.85,
+                        duration: 1.1,
+                        ease: "power2.out",
+                    },
+                    "-=0.7"
+                );
+        }, heroRef);
+
+        return () => ctx.revert();
     }, []);
 
-    const scrollToSection = (id) => {
-        const element = document.getElementById(id);
-        if (element) element.scrollIntoView({ behavior: "smooth" });
+    const scrollTo = (id) => {
+        scrollToSection(id, -75);
     };
 
-    const textVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.6,
-                ease: "easeOut",
-            },
+    const socials = [
+        { icon: FiGithub, href: "https://github.com/soumyadip-adak99", label: "GitHub" },
+        {
+            icon: FiLinkedin,
+            href: "https://www.linkedin.com/in/soumyadip-adak-a19b03281/",
+            label: "LinkedIn",
         },
-    };
-
-    const imageVariants = {
-        hidden: { x: 50, opacity: 0 },
-        visible: {
-            x: 0,
-            opacity: 1,
-            transition: {
-                duration: 1,
-                ease: "easeOut",
-                delay: 0.5,
-            },
-        },
-    };
-
-    const SOCIAL_MEDIA_ELEMENTS = [
-        { icon: FiGithub, href: "https://github.com/soumyadip-adak99" },
-        { icon: FiLinkedin, href: "https://www.linkedin.com/in/soumyadip-adak-a19b03281/" },
-        { icon: Mail, href: "work.soumyadipadak@gmail.com" },
+        { icon: FiMail, href: "mailto:work.soumyadipadak@gmail.com", label: "Email" },
     ];
 
     return (
-        <div
-            className={`min-h-screen transition-all duration-500 ${
-                isDarkMode ? "bg-black text-white" : "bg-gray-50 text-gray-900"
-            }`}
+        <section
+            id="home"
+            ref={heroRef}
+            className="min-h-screen relative flex items-center justify-center pt-28 pb-16 px-6 lg:px-12 overflow-hidden"
         >
-            {/* Hero section */}
+            <div className="max-w-7xl mx-auto w-full z-10">
+                <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                    {/* Left Column: Headline, Bio & Actions (7 cols) */}
+                    <div className="lg:col-span-7 text-left space-y-7">
+                        {/* Status Badge */}
+                        <div className="hero-badge inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#111114] border border-[#29292F] shadow-sm">
+                            <span className="relative flex h-2.5 w-2.5">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF6A00] opacity-75" />
+                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF6A00]" />
+                            </span>
+                            <span className="font-mono text-xs text-[#A1A1AA] tracking-wide">
+                                Available for software engineering roles & projects
+                            </span>
+                        </div>
 
-            <motion.section
-                id="home"
-                style={{ y: heroY }}
-                className="min-h-screen flex items-center justify-center relative px-6 pt-8"
-            >
-                <div className="absolute inset-0 overflow-hidden">
-                    {/* Orange ambient glow – top right */}
-                    <motion.div
-                        animate={{
-                            scale: [1, 1.1, 1],
-                            rotate: [0, 180, 360],
-                        }}
-                        transition={{
-                            duration: 20,
-                            repeat: Infinity,
-                            ease: "linear",
-                        }}
-                        className={`absolute top-20 right-20 w-64 h-64 rounded-full blur-3xl
-                            ${isDarkMode ? "opacity-15 bg-orange-500" : "opacity-10 bg-orange-400"}`}
-                    />
+                        {/* Confident, Striking Headline */}
+                        <div className="space-y-1">
+                            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-[#F5F5F5] leading-[1.08]">
+                                <span className="hero-title-line block">
+                                    Engineering robust
+                                </span>
+                                <span className="hero-title-line block">
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6A00] via-[#FF8C42] to-[#FFA066]">
+                                        backend systems
+                                    </span>
+                                </span>
+                                <span className="hero-title-line block text-[#D4D4D8]">
+                                    & modern interfaces.
+                                </span>
+                            </h1>
+                        </div>
 
-                    {/* Amber ambient glow – bottom left */}
-                    <motion.div
-                        animate={{
-                            scale: [1.1, 1, 1.1],
-                            rotate: [360, 180, 0],
-                        }}
-                        transition={{
-                            duration: 25,
-                            repeat: Infinity,
-                            ease: "linear",
-                        }}
-                        className={`absolute bottom-20 left-20 w-48 h-48 rounded-full blur-3xl
-                            ${isDarkMode ? "opacity-10 bg-amber-500" : "opacity-8 bg-amber-400"}`}
-                    />
-                </div>
+                        {/* Supporting Professional Description */}
+                        <p className="hero-description text-base sm:text-lg text-[#A1A1AA] font-normal leading-relaxed max-w-2xl">
+                            Hi, I'm <strong className="text-[#F5F5F5] font-semibold">Soumyadip Adak</strong>. I architect full-stack web applications with <span className="text-[#F5F5F5]">Java, Spring Boot, Spring AI, RAG, React, and cloud architectures</span>—combining clean, scalable server-side patterns with fluid, responsive user experiences.
+                        </p>
 
-                <div className="max-w-7xl mx-auto w-full z-10 mt-20">
-                    {/* Mobile Layout - center */}
+                        {/* Call to Actions & Socials */}
+                        <div className="hero-action-buttons pt-2 flex flex-wrap items-center gap-4">
+                            <button
+                                onClick={() => scrollTo("work")}
+                                className="px-7 py-3.5 rounded-xl bg-[#FF6A00] hover:bg-[#FF8C42] text-white font-semibold text-xs uppercase tracking-wider transition-all duration-200 glow-orange-button flex items-center gap-2 cursor-pointer"
+                            >
+                                <span>Explore Projects</span>
+                                <ArrowUpRight size={16} />
+                            </button>
 
-                    <div className="block lg:hidden">
-                        <motion.div
-                            initial="hidden"
-                            animate="visible"
-                            variants={containerVariants}
-                            className="text-center"
-                        >
-                            {/* profile image - mobile */}
-                            <motion.div variants={imageVariants} className="mb-8">
-                                <div className="w-32 h-32 mx-auto relative">
-                                    <motion.div
-                                        whileHover={{ scale: 1.05 }}
-                                        className={`w-full h-32 rounded-2xl overflow-hidden border-4 
-                                            ${
-                                                isDarkMode ? "border-white/10" : "border-gray-300"
-                                            } shadow-2xl`}
+                            <button
+                                onClick={() => scrollTo("contact")}
+                                className="px-7 py-3.5 rounded-xl bg-[#17171B] hover:bg-[#1E1E24] text-[#F5F5F5] border border-[#29292F] hover:border-[#FF6A00]/40 font-semibold text-xs uppercase tracking-wider transition-all duration-200 cursor-pointer"
+                            >
+                                <span>Get in Touch</span>
+                            </button>
+
+                            {/* Social Quick Links */}
+                            <div className="flex items-center gap-2 sm:ml-2">
+                                {socials.map((item) => (
+                                    <a
+                                        key={item.label}
+                                        href={item.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label={item.label}
+                                        className="hero-socials p-3 rounded-xl bg-[#111114] border border-[#29292F] text-[#A1A1AA] hover:text-[#FF6A00] hover:border-[#FF6A00]/40 hover:bg-[#17171B] transition-all duration-200"
                                     >
-                                        {isDarkMode ? (
-                                            <img
-                                                src={PROFILE_PIC}
-                                                alt="profile picture"
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            <img
-                                                src={BL_PROFILE_PIC}
-                                                alt="profile picture"
-                                                className="w-full h-full object-cover"
-                                            />
-                                        )}{" "}
-                                    </motion.div>
+                                        <item.icon size={17} />
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
 
-                                    {/* Decorative ring – orange */}
-                                    <motion.div
-                                        animate={{ rotate: 360 }}
-                                        transition={{
-                                            duration: 20,
-                                            repeat: Infinity,
-                                            ease: "linear",
-                                        }}
-                                        className="absolute -inset-2 rounded-2xl border border-orange-500/30"
+                        {/* Key Technical Highlights Pills */}
+                        <div className="pt-4 flex flex-wrap items-center gap-2 text-xs font-mono text-[#A1A1AA]">
+                            <span className="text-[11px] uppercase tracking-wider text-[#71717A] mr-1">
+                                Core Focus:
+                            </span>
+                            {["Spring Boot", "React", "RAG", "PostgreSQL", "Docker", "RESTful APIs"].map((item) => (
+                                <span
+                                    key={item}
+                                    className="px-3 py-1 rounded-lg bg-[#111114] border border-[#29292F] text-[#D4D4D8]"
+                                >
+                                    {item}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Right Column: Hero Profile Artwork with Moving Orbital System (5 cols) */}
+                    <div className="lg:col-span-5 flex justify-center lg:justify-end">
+                        <div className="hero-card-container relative w-full max-w-sm sm:max-w-md flex items-center justify-center">
+                            {/* Layered Subtle Orange Backlight */}
+                            <div className="absolute -inset-4 bg-gradient-to-tr from-[#FF6A00]/20 via-[#FF8C42]/5 to-transparent rounded-[32px] blur-2xl -z-10 pointer-events-none" />
+
+                            {/* Dynamic Moving Orbital Background System */}
+                            <div className="hero-orbit-system absolute inset-0 flex items-center justify-center pointer-events-none -z-10 overflow-visible">
+                                {/* Ambient Core Radial Glow */}
+                                <div
+                                    className="absolute w-[360px] h-[360px] sm:w-[440px] sm:h-[440px] rounded-full pointer-events-none"
+                                    style={{
+                                        background:
+                                            "radial-gradient(circle at center, rgba(255, 106, 0, 0.16) 0%, rgba(255, 140, 66, 0.05) 45%, transparent 70%)",
+                                        transform: "translateZ(0)",
+                                    }}
+                                />
+
+                                {/* Outer Orbit Ring (Large - Smooth Slow Clockwise Orbit) */}
+                                <div className="absolute w-[470px] h-[470px] sm:w-[560px] sm:h-[560px] rounded-full border border-[#29292F]/50 animate-orbit-spin-slow">
+                                    {/* Orbital Satellite 1 (Primary Orange Glow) */}
+                                    <div className="absolute -top-1.5 left-1/2 -translate-x-1/2">
+                                        <span className="w-3 h-3 rounded-full bg-[#FF6A00] shadow-[0_0_12px_#FF6A00] block" />
+                                    </div>
+                                    {/* Orbital Satellite 2 (Subtle node) */}
+                                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2">
+                                        <span className="w-2 h-2 rounded-full bg-[#71717A]/80 shadow-[0_0_8px_rgba(255,106,0,0.3)] block" />
+                                    </div>
+                                </div>
+
+                                {/* Middle Orbit Ring (Medium - Dashed Counter-Clockwise Orbit) */}
+                                <div className="absolute w-[390px] h-[390px] sm:w-[460px] sm:h-[460px] rounded-full border border-dashed border-[#FF6A00]/25 animate-orbit-spin-reverse">
+                                    {/* Orbital Satellite 3 (Amber Sparkle Node) */}
+                                    <div className="absolute top-1/2 -left-1.5 -translate-y-1/2">
+                                        <span className="w-2.5 h-2.5 rounded-full bg-[#FFA066] shadow-[0_0_10px_#FF8C42] block" />
+                                    </div>
+                                    {/* Tech dot */}
+                                    <div className="absolute top-1/2 -right-1 -translate-y-1/2">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-[#FF6A00]/60 block" />
+                                    </div>
+                                </div>
+
+                                {/* Inner Orbit Ring (Inner Tech Ring) */}
+                                <div className="absolute w-[310px] h-[310px] sm:w-[370px] sm:h-[370px] rounded-full border border-[#29292F]/40 animate-orbit-spin-inner">
+                                    {/* Orbital Satellite 4 */}
+                                    <div className="absolute -top-1 left-1/2 -translate-x-1/2">
+                                        <span className="w-2 h-2 rounded-full bg-[#FF8C42] shadow-[0_0_8px_#FF8C42] block" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Main Portrait Frame - Clean, Crisp & Unobstructed */}
+                            <div className="relative w-full rounded-2xl overflow-hidden bg-[#111114] border border-[#29292F] shadow-2xl group transition-all duration-300 hover:border-[#FF6A00]/40">
+                                <div className="aspect-[4/5] overflow-hidden">
+                                    <ProtectedImage
+                                        src={PROFILE_PIC}
+                                        alt="Soumyadip Adak"
+                                        width={800}
+                                        height={1000}
+                                        canvasClassName="transition-transform duration-700 ease-out group-hover:scale-105"
+                                        objectFit="cover"
+                                        objectPosition="center"
                                     />
                                 </div>
-                            </motion.div>
-
-                            <motion.div
-                                variants={textVariants}
-                                className={`text-sm uppercase tracking-widest ${
-                                    isDarkMode ? "text-gray-500" : "text-gray-600"
-                                } mb-4`}
-                            >
-                                Full Stack Developer
-                            </motion.div>
-
-                            <motion.h1
-                                variants={itemVariants}
-                                className="text-3xl md:text-5xl font-light mb-6 leading-tight"
-                            >
-                                <span className={isDarkMode ? "text-white" : "text-gray-900"}>
-                                    Building digital
-                                </span>
-                                <span className="text-orange-500 font-medium ml-2">experiences</span>
-                                <br />
-
-                                <span className={isDarkMode ? "text-white" : "text-gray-900"}>
-                                    that matter
-                                </span>
-                            </motion.h1>
-
-                            <motion.p
-                                variants={itemVariants}
-                                className={`text-base md:text-lg ${
-                                    isDarkMode ? "text-gray-400" : "text-gray-600"
-                                }
-                                    mb-8 max-w-xl mx-auto font-light leading-relaxed`}
-                            >
-                                I craft beautiful, functional web application with modern
-                                technologies and thoughtful users experiences.
-                            </motion.p>
-
-                            {/* CTA buttons -mobile */}
-                            <motion.div
-                                variants={itemVariants}
-                                className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
-                            >
-                                <motion.button
-                                    whileHover={{ y: -2 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    onClick={() => scrollToSection("work")}
-                                    className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-full text-sm uppercase tracking-wider font-medium transition-all duration-300 shadow-lg shadow-orange-500/25"
-                                >
-                                    View Work
-                                </motion.button>
-
-                                <motion.button
-                                    whileHover={{ y: -2 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    onClick={() => scrollToSection("contact")}
-                                    className={`border ${
-                                        isDarkMode
-                                            ? "border-white/15 hover:border-orange-500/50 text-gray-300 hover:text-orange-400"
-                                            : "border-gray-300 hover:border-orange-400 text-gray-700 hover:text-orange-500"
-                                    } px-8 py-3 rounded-full text-sm uppercase 
-                                        tracking-wider font-medium transition-all duration-300`}
-                                >
-                                    Get in Touch
-                                </motion.button>
-                            </motion.div>
-
-                            {/* social links -mobile */}
-                            <motion.div
-                                variants={itemVariants}
-                                className="flex justify-center space-x-6 mb-8"
-                            >
-                                {[
-                                    { icon: FiGithub, href: "https://github.com/soumyadip-adak99" },
-                                    {
-                                        icon: FiLinkedin,
-                                        href: "https://www.linkedin.com/in/soumyadip-adak-a19b03281/",
-                                    },
-                                    { icon: Mail, href: "work.soumyadipadak@gmail.com" },
-                                ].map((social, index) => (
-                                    <motion.a
-                                        key={index}
-                                        href={social.href}
-                                        target="_blank"
-                                        whileHover={{ y: -3, scale: 1.1 }}
-                                        className={`p-3 rounded-full transition-colors ${
-                                            isDarkMode
-                                                ? "text-gray-400 hover:text-orange-400 hover:bg-orange-500/10"
-                                                : "text-gray-600 hover:text-orange-500 hover:bg-orange-100"
-                                        }`}
-                                    >
-                                        <social.icon size={20} />
-                                    </motion.a>
-                                ))}
-                            </motion.div>
-
-                            {/* tech stack  mobile*/}
-                            <motion.div
-                                variants={itemVariants}
-                                className="flex justify-center items-center space-x-6 text-xs uppercase tracking-widest flex-wrap"
-                            >
-                                <span className={isDarkMode ? "text-gray-600" : "text-gray-500"}>
-                                    Spring Boot
-                                </span>
-                                <span className={isDarkMode ? "text-gray-700" : "text-gray-400"}>
-                                    .
-                                </span>
-                                <span className={isDarkMode ? "text-gray-600" : "text-gray-500"}>
-                                    React
-                                </span>
-                                <span className={isDarkMode ? "text-gray-700" : "text-gray-400"}>
-                                    .
-                                </span>
-                                <span className={isDarkMode ? "text-gray-600" : "text-gray-500"}>
-                                    MongoDB
-                                </span>
-                            </motion.div>
-                        </motion.div>
-                    </div>
-
-                    {/* Desktop layout -split */}
-                    <div className="hidden lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-                        {/* left column -content */}
-                        <motion.div
-                            initial="hidden"
-                            animate="visible"
-                            variants={containerVariants}
-                            className="text-left"
-                        >
-                            <motion.div
-                                variants={textVariants}
-                                className={`text-sm uppercase tracking-widest ${
-                                    isDarkMode ? "text-gray-500" : " text-gray-600"
-                                } mb-6`}
-                            >
-                                Full Stack Developer
-                            </motion.div>
-                            <motion.h1
-                                variants={itemVariants}
-                                className="text-5xl xl:text-7xl font-light mb-8 leading-tight"
-                            >
-                                <span className={`${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                                    Building digital
-                                </span>{" "}
-                                <br />
-                                <span className="text-orange-500 font-medium">experiences</span>{" "}
-                                <br />
-                                <span className={isDarkMode ? "text-white" : "text-gray-900"}>
-                                    that matter
-                                </span>
-                            </motion.h1>
-
-                            <motion.p
-                                variants={itemVariants}
-                                className={`text-xl ${
-                                    isDarkMode ? "text-gray-400" : "text-gray-600"
-                                } mb-12 font-light leading-relaxed max-w-lg`}
-                            >
-                                I craft beautiful, functional web application with modern
-                                technologies and thoughtful user experiences
-                            </motion.p>
-
-                            {/* CTA button */}
-                            <motion.div variants={itemVariants} className="flex gap-6 mb-8">
-                                <motion.button
-                                    whileHover={{ y: -2 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    onClick={() => scrollToSection("work")}
-                                    className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-full text-sm uppercase tracking-wider font-medium transition-all duration-300 shadow-lg shadow-orange-500/25"
-                                >
-                                    View Work
-                                </motion.button>
-
-                                <motion.button
-                                    whileHover={{ y: -2 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    onClick={() => scrollToSection("contact")}
-                                    className={`border ${
-                                        isDarkMode
-                                            ? "border-white/15 hover:border-orange-500/50 text-gray-300 hover:text-orange-400"
-                                            : "border-gray-300 hover:border-orange-400 text-gray-700 hover:text-orange-500"
-                                    } px-8 py-4 rounded-full text-sm uppercase tracking-wider font-medium transition-all duration-300`}
-                                >
-                                    Get in Touch
-                                </motion.button>
-                            </motion.div>
-
-                            {/* social icons - desktop */}
-                            <motion.div variants={itemVariants} className="flex space-x-6 mb-12">
-                                {SOCIAL_MEDIA_ELEMENTS.map((social, index) => (
-                                    <motion.a
-                                        key={index}
-                                        href={social.href}
-                                        target="_blank"
-                                        whileHover={{ y: -3, scale: 1.1 }}
-                                        className={`p-3 rounded-full transition-colors ${
-                                            isDarkMode
-                                                ? "text-gray-400 hover:text-orange-400 hover:bg-orange-500/10"
-                                                : "text-gray-600 hover:text-orange-500 hover:bg-orange-100"
-                                        }`}
-                                    >
-                                        <social.icon size={20} />
-                                    </motion.a>
-                                ))}
-                            </motion.div>
-                        </motion.div>
-
-                        {/* right column profile image */}
-                        <motion.div
-                            initial="hidden"
-                            animate="visible"
-                            variants={imageVariants}
-                            className="flex justify-center lg:justify-end"
-                        >
-                            <div className="relative">
-                                {/* Tech stack */}
-                                <motion.div
-                                    variants={itemVariants}
-                                    className="flex items-center space-x-8 text-xs uppercase tracking-widest absolute -top-16 -left-28"
-                                >
-                                    <span
-                                        className={isDarkMode ? "text-gray-600" : "text-gray-500"}
-                                    >
-                                        SpringBoot
-                                    </span>
-                                    <span
-                                        className={isDarkMode ? "text-gray-700" : "text-gray-400"}
-                                    >
-                                        .
-                                    </span>
-                                    <span
-                                        className={isDarkMode ? "text-gray-600" : "text-gray-500"}
-                                    >
-                                        React
-                                    </span>
-                                    <span
-                                        className={isDarkMode ? "text-gray-700" : "text-gray-400"}
-                                    >
-                                        .
-                                    </span>
-                                    <span
-                                        className={isDarkMode ? "text-gray-600" : "text-gray-500"}
-                                    >
-                                        MySQL
-                                    </span>
-                                    <span
-                                        className={isDarkMode ? "text-gray-700" : "text-gray-400"}
-                                    >
-                                        .
-                                    </span>
-                                    <span
-                                        className={isDarkMode ? "text-gray-600" : "text-gray-500"}
-                                    >
-                                        MongoDB
-                                    </span>
-                                </motion.div>
-
-                                <motion.div
-                                    whileHover={{ scale: 1.02 }}
-                                    className={`w-80 h-96 rounded-2xl overflow-hidden border-4 ${
-                                        isDarkMode ? "border-white/10" : "border-gray-300"
-                                    } shadow-2xl ${isDarkMode ? "shadow-orange-500/10" : ""}`}
-                                >
-                                    {isDarkMode ? (
-                                        <img
-                                            src={PROFILE_PIC}
-                                            alt="profile picture"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <img
-                                            src={BL_PROFILE_PIC}
-                                            alt="profile picture"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    )}
-                                </motion.div>
-
-                                {/* decorative rings – orange */}
-                                <motion.div
-                                    animate={{ rotate: 360 }}
-                                    transition={{
-                                        duration: 20,
-                                        repeat: Infinity,
-                                        ease: "linear",
-                                    }}
-                                    className="absolute -inset-4 rounded-3xl border border-orange-500/25"
-                                />
-
-                                <motion.div
-                                    animate={{ rotate: -360 }}
-                                    transition={{
-                                        duration: 30,
-                                        repeat: Infinity,
-                                        ease: "linear",
-                                    }}
-                                    className="absolute -inset-8 rounded-3xl border border-amber-500/10"
-                                />
                             </div>
-                        </motion.div>
+                        </div>
                     </div>
                 </div>
 
-                {/* scroll indicator */}
-                <motion.div
-                    animate={{ y: [0, 8, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-                >
-                    <ArrowDown
-                        size={20}
-                        className={isDarkMode ? "text-gray-600" : "text-gray-400"}
-                    />
-                </motion.div>
-            </motion.section>
-        </div>
+                {/* Subtle Scroll Indicator */}
+                <div className="mt-16 sm:mt-20 flex justify-center">
+                    <button
+                        onClick={() => scrollTo("skills")}
+                        aria-label="Scroll to Skills Section"
+                        className="p-2.5 rounded-full border border-[#29292F] text-[#71717A] hover:text-[#FF6A00] hover:border-[#FF6A00]/40 transition-colors duration-200 cursor-pointer animate-bounce"
+                        style={{ animationDuration: "2.5s" }}
+                    >
+                        <ArrowDown size={16} />
+                    </button>
+                </div>
+            </div>
+        </section>
     );
 }
-
-export default HeroSection;

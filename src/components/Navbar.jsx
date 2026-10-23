@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Code2, Sun, Moon, X, Menu } from "lucide-react";
+import { X, Menu, ArrowUpRight } from "lucide-react";
 import { FiGithub, FiLinkedin } from "react-icons/fi";
-import { useTheme } from "../context/ThemeContext";
-// import logo from "../assets/logo.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLaptopCode } from "@fortawesome/free-solid-svg-icons";
+
+import { scrollToSection, scrollToTop } from "../utils/scrollHelper";
+import LOGO_IMG from "../assets/logo.png";
+import ProtectedImage from "./ProtectedImage";
 
 export default function Navbar() {
-    const { isDarkMode, toggleDarkMode } = useTheme();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [activeSection, setActiveSection] = useState("home");
@@ -21,14 +20,30 @@ export default function Navbar() {
         { label: "Contact", id: "contact" },
     ];
 
-    /* shrink navbar and apply glass effect on scroll */
+    // RAF-throttled scroll state observer (only triggers state update on threshold crossing)
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 20);
+        let ticking = false;
+        let isScrolled = window.scrollY > 20;
+
+        const onScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const nowScrolled = window.scrollY > 20;
+                    if (nowScrolled !== isScrolled) {
+                        isScrolled = nowScrolled;
+                        setScrolled(nowScrolled);
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    /* active section highlight observer */
+    // Intersection observer for section highlighting
     useEffect(() => {
         const obs = new IntersectionObserver(
             (entries) => {
@@ -36,7 +51,7 @@ export default function Navbar() {
                     if (e.isIntersecting) setActiveSection(e.target.id);
                 });
             },
-            { rootMargin: "-40% 0px -55% 0px" }
+            { rootMargin: "-30% 0px -50% 0px" }
         );
         navItems.forEach(({ id }) => {
             const el = document.getElementById(id);
@@ -45,23 +60,25 @@ export default function Navbar() {
         return () => obs.disconnect();
     }, []);
 
-    /* lock body scroll when mobile menu is open */
+    // Lock body scroll when mobile menu is open
     useEffect(() => {
-        document.body.style.overflow = isMenuOpen ? "hidden" : "";
+        if (isMenuOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
         return () => {
             document.body.style.overflow = "";
         };
     }, [isMenuOpen]);
 
-    const goTo = (id) => {
-        const el = document.getElementById(id);
-        if (el) {
-            window.scrollTo({
-                top: el.getBoundingClientRect().top + window.scrollY - 80,
-                behavior: "smooth",
-            });
-        }
+    const scrollTo = (id) => {
         setIsMenuOpen(false);
+        if (id === "home") {
+            scrollToTop();
+        } else {
+            scrollToSection(id, -75);
+        }
     };
 
     const socialLinks = [
@@ -73,110 +90,59 @@ export default function Navbar() {
         },
     ];
 
-    /* ── Mobile Menu Animation Variants (Clean & Premium) ── */
-    const overlayVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: { duration: 0.3, ease: "easeInOut" },
-        },
-        exit: {
-            opacity: 0,
-            transition: { duration: 0.2, ease: "easeInOut", delay: 0.2 },
-        },
-    };
-
-    const listVariants = {
-        hidden: {},
-        visible: {
-            transition: { staggerChildren: 0.08, delayChildren: 0.1 },
-        },
-        exit: {
-            transition: { staggerChildren: 0.05, staggerDirection: -1 },
-        },
-    };
-
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: { duration: 0.4, ease: [0.25, 1, 0.5, 1] },
-        },
-        exit: {
-            y: 10,
-            opacity: 0,
-            transition: { duration: 0.2 },
-        },
-    };
-
     return (
         <>
-            {/* ─── Desktop / Main Navbar ──────────────────────────────────── */}
-            <nav
-                className={`fixed top-0 w-full z-50 transition-all duration-300
-                    ${
-                        scrolled
-                            ? isDarkMode
-                                ? "bg-black/80 backdrop-blur-xl shadow-lg shadow-black/40"
-                                : "bg-white/90 backdrop-blur-xl shadow-sm"
-                            : "bg-transparent"
+            <header
+                style={{ transform: "translateZ(0)" }}
+                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+                    ? "bg-[#0B0B0D]/90 backdrop-blur-md border-b border-[#29292F]/80 shadow-[0_4px_30px_rgba(0,0,0,0.6)]"
+                    : "bg-transparent border-b border-transparent"
                     }`}
             >
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
-                    {/* Logo */}
+                    {/* Brand Identifier */}
                     <button
-                        onClick={() => goTo("home")}
-                        className="flex items-center gap-2 cursor-pointer select-none group focus:outline-none"
+                        onClick={() => scrollTo("home")}
+                        className="flex items-center gap-3 cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6A00] rounded-xl p-1 -ml-1"
+                        aria-label="Soumyadip Adak - Return to Top"
                     >
-                        <div
-                            className={`p-2 rounded-xl transition-all duration-300 group-hover:scale-105 ${
-                                isDarkMode ? "bg-orange-500/10" : "bg-orange-50"
-                            }`}
-                        >
-                            {/* <image scr="" size={24} className="text-orange-500" /> */}
-                            <FontAwesomeIcon
-                                icon={faLaptopCode}
-                                style={{ color: "rgb(248, 142, 45)" }}
-                                className="text-xl"
+                        <div className="w-10 h-10 rounded-xl bg-[#17171B] border border-[#29292F] group-hover:border-[#FF6A00]/50 flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_16px_rgba(255,106,0,0.25)] p-1.5 overflow-hidden">
+                            <ProtectedImage
+                                src={LOGO_IMG}
+                                alt="Soumyadip Adak Logo"
+                                width={72}
+                                height={72}
+                                objectFit="contain"
                             />
                         </div>
-                        <span
-                            className={`text-lg font-bold tracking-tight transition-colors duration-300 ${
-                                isDarkMode
-                                    ? "text-white group-hover:text-orange-400"
-                                    : "text-gray-900 group-hover:text-orange-500"
-                            }`}
-                        >
-                            Time to Code
-                        </span>
+                        <div className="text-left">
+                            <div className="text-lg font-semibold tracking-tight text-[#F5F5F5] group-hover:text-[#FF6A00] transition-colors">
+                                Soumyadip Adak
+                            </div>
+                        </div>
                     </button>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center gap-8">
+                    <nav className="hidden md:flex items-center gap-1 bg-[#111114]/80 p-1.5 rounded-full border border-[#29292F] backdrop-blur-md">
                         {navItems.map(({ label, id }) => {
                             const isActive = activeSection === id;
                             return (
                                 <button
                                     key={id}
-                                    onClick={() => goTo(id)}
-                                    className={`relative text-xs uppercase tracking-widest font-medium transition-all duration-300 cursor-pointer hover:scale-105 focus:outline-none py-2
-                                        ${
-                                            isActive
-                                                ? "text-orange-500"
-                                                : isDarkMode
-                                                  ? "text-gray-400 hover:text-white"
-                                                  : "text-gray-500 hover:text-gray-900"
+                                    onClick={() => scrollTo(id)}
+                                    className={`relative px-4 py-2 text-xs uppercase tracking-wider font-medium transition-all duration-200 cursor-pointer rounded-full focus:outline-none ${isActive
+                                        ? "text-[#F5F5F5] font-semibold"
+                                        : "text-[#A1A1AA] hover:text-[#F5F5F5] hover:bg-[#17171B]"
                                         }`}
                                 >
                                     {label}
                                     {isActive && (
                                         <motion.span
-                                            layoutId="desktop-active-indicator"
-                                            className="absolute -bottom-1 left-0 right-0 h-[2px] bg-orange-500 rounded-full"
+                                            layoutId="nav-active-pill"
+                                            className="absolute inset-0 bg-[#17171B] border border-[#FF6A00]/40 rounded-full -z-10 shadow-[0_0_15px_rgba(255,106,0,0.15)]"
                                             transition={{
                                                 type: "spring",
-                                                stiffness: 300,
+                                                stiffness: 380,
                                                 damping: 30,
                                             }}
                                         />
@@ -184,143 +150,102 @@ export default function Navbar() {
                                 </button>
                             );
                         })}
+                    </nav>
 
-                        {/* Theme Toggle Desktop */}
+                    {/* Desktop Right Actions */}
+                    <div className="hidden md:flex items-center gap-3">
+                        {socialLinks.map(({ icon: Icon, href, label }) => (
+                            <a
+                                key={label}
+                                href={href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={label}
+                                className="p-2.5 rounded-xl bg-[#17171B] border border-[#29292F] text-[#A1A1AA] hover:text-[#FF6A00] hover:border-[#FF6A00]/40 transition-all duration-200 hover:scale-105"
+                            >
+                                <Icon size={16} />
+                            </a>
+                        ))}
+
                         <button
-                            onClick={() => toggleDarkMode(isDarkMode ? "light" : "dark")}
-                            className={`p-2.5 rounded-full transition-all duration-300 cursor-pointer hover:scale-110 focus:outline-none
-                                ${
-                                    isDarkMode
-                                        ? "text-gray-400 hover:text-orange-400 hover:bg-orange-500/10"
-                                        : "text-gray-500 hover:text-orange-500 hover:bg-orange-50"
-                                }`}
-                            aria-label="Toggle Theme"
+                            onClick={() => scrollTo("contact")}
+                            className="ml-1 inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#FF6A00] hover:bg-[#FF8C42] text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200 glow-orange-button cursor-pointer"
                         >
-                            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                            <span>Contact</span>
+                            <ArrowUpRight size={14} />
                         </button>
                     </div>
 
-                    {/* Mobile Controls (Theme Toggle + Hamburger) */}
-                    <div className="md:hidden flex items-center gap-3">
-                        {/* Theme Toggle Mobile */}
+                    {/* Mobile Hamburger Button */}
+                    <div className="md:hidden flex items-center gap-2">
                         <button
-                            onClick={() => toggleDarkMode(isDarkMode ? "light" : "dark")}
-                            className={`p-2 rounded-full transition-all duration-300 cursor-pointer hover:scale-110 focus:outline-none
-                                ${
-                                    isDarkMode
-                                        ? "text-gray-400 hover:text-orange-400 hover:bg-orange-500/10"
-                                        : "text-gray-500 hover:text-orange-500 hover:bg-orange-50"
-                                }`}
-                            aria-label="Toggle Theme"
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                            className="p-2.5 rounded-xl bg-[#17171B] border border-[#29292F] text-[#F5F5F5] hover:border-[#FF6A00]/50 transition-colors focus:outline-none"
                         >
-                            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
                         </button>
-
-                        {/* Hamburger Open */}
-                        {!isMenuOpen && (
-                            <button
-                                onClick={() => setIsMenuOpen(true)}
-                                aria-label="Open menu"
-                                className={`p-2 rounded-xl transition-all duration-300 cursor-pointer hover:scale-105 focus:outline-none
-                                    ${
-                                        isDarkMode
-                                            ? "text-gray-300 hover:text-white hover:bg-white/10"
-                                            : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                                    }`}
-                            >
-                                <Menu size={24} />
-                            </button>
-                        )}
                     </div>
                 </div>
-            </nav>
+            </header>
 
-            {/* ─── Full-Screen Mobile Menu Overlay ─────────────────────────────── */}
+            {/* Mobile Drawer Overlay */}
             <AnimatePresence>
                 {isMenuOpen && (
                     <motion.div
-                        variants={overlayVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        className={`fixed inset-0 z-[60] flex flex-col justify-between ${
-                            isDarkMode
-                                ? "bg-black/95 backdrop-blur-md"
-                                : "bg-white/95 backdrop-blur-md"
-                        }`}
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" }}
+                        className="fixed inset-0 top-20 z-40 bg-[#0B0B0D]/98 backdrop-blur-2xl border-t border-[#29292F] px-6 py-8 flex flex-col justify-between md:hidden"
                     >
-                        {/* Top Right Close Button */}
-                        <div className="flex justify-end p-6">
-                            <button
-                                onClick={() => setIsMenuOpen(false)}
-                                className={`p-3 rounded-full transition-all duration-300 cursor-pointer hover:scale-110 focus:outline-none
-                                    ${
-                                        isDarkMode
-                                            ? "bg-white/10 text-gray-300 hover:text-white hover:bg-white/20"
-                                            : "bg-gray-100 text-gray-600 hover:text-gray-900 hover:bg-gray-200"
-                                    }`}
-                                aria-label="Close menu"
-                            >
-                                <X size={24} />
-                            </button>
-                        </div>
-
-                        {/* Centered Navigation Links */}
-                        <motion.nav
-                            variants={listVariants}
-                            initial="hidden"
-                            animate="visible"
-                            exit="exit"
-                            className="flex-1 flex flex-col items-center justify-center gap-10 bg-transparent"
-                        >
+                        <nav className="flex flex-col gap-2">
                             {navItems.map(({ label, id }) => {
                                 const isActive = activeSection === id;
                                 return (
-                                    <motion.button
+                                    <button
                                         key={id}
-                                        variants={itemVariants}
-                                        onClick={() => goTo(id)}
-                                        className={`text-3xl sm:text-4xl font-light tracking-wide transition-all duration-300 cursor-pointer hover:scale-110 focus:outline-none
-                                            ${
-                                                isActive
-                                                    ? "text-orange-500 font-medium"
-                                                    : isDarkMode
-                                                      ? "text-gray-400 hover:text-white"
-                                                      : "text-gray-500 hover:text-gray-900"
+                                        onClick={() => scrollTo(id)}
+                                        className={`w-full text-left py-4 px-5 rounded-xl text-lg font-medium transition-all ${isActive
+                                            ? "bg-[#17171B] text-[#FF6A00] border border-[#FF6A00]/30 font-semibold"
+                                            : "text-[#A1A1AA] hover:text-[#F5F5F5] hover:bg-[#111114]"
                                             }`}
                                     >
-                                        {label}
-                                    </motion.button>
+                                        <div className="flex items-center justify-between">
+                                            <span>{label}</span>
+                                            {isActive && (
+                                                <span className="w-2 h-2 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00]" />
+                                            )}
+                                        </div>
+                                    </button>
                                 );
                             })}
-                        </motion.nav>
+                        </nav>
 
-                        {/* Bottom Social Links */}
-                        <motion.div
-                            variants={itemVariants}
-                            initial="hidden"
-                            animate="visible"
-                            exit="exit"
-                            className="p-10 flex justify-center items-center gap-8"
-                        >
-                            {socialLinks.map(({ icon: Icon, href, label }) => (
-                                <a
-                                    key={label}
-                                    href={href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    title={label}
-                                    className={`p-4 rounded-full transition-all duration-300 cursor-pointer hover:scale-110 focus:outline-none border
-                                        ${
-                                            isDarkMode
-                                                ? "border-white/10 text-gray-400 hover:text-orange-400 hover:border-orange-500/50 hover:bg-orange-500/10"
-                                                : "border-gray-200 text-gray-500 hover:text-orange-500 hover:border-orange-300 hover:bg-orange-50"
-                                        }`}
-                                >
-                                    <Icon size={24} />
-                                </a>
-                            ))}
-                        </motion.div>
+                        <div className="pt-6 border-t border-[#29292F] space-y-4">
+                            <button
+                                onClick={() => scrollTo("contact")}
+                                className="w-full py-4 rounded-xl bg-[#FF6A00] text-white text-center font-semibold text-sm uppercase tracking-wider glow-orange-button cursor-pointer flex items-center justify-center gap-2"
+                            >
+                                <span>Get in Touch</span>
+                                <ArrowUpRight size={16} />
+                            </button>
+
+                            <div className="flex items-center justify-center gap-4 pt-2">
+                                {socialLinks.map(({ icon: Icon, href, label }) => (
+                                    <a
+                                        key={label}
+                                        href={href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label={label}
+                                        className="p-3 rounded-xl bg-[#17171B] border border-[#29292F] text-[#A1A1AA] hover:text-[#FF6A00]"
+                                    >
+                                        <Icon size={18} />
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>

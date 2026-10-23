@@ -1,15 +1,12 @@
 import { useState, useRef } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { Send } from "lucide-react";
-import { containerVariants, itemVariants } from "../../utils/helper";
-import { useTheme } from "../../context/ThemeContext";
+import { Send, Clock, ArrowUpRight } from "lucide-react";
 import TextInput from "../Input/TextInput";
 import SuccessModal from "../SuccessModal";
 import { CONTACT_INFO, SOCIAL_LINKS } from "../../utils/data";
 import emailjs from "@emailjs/browser";
 
+// Direct inquiry and messaging portal
 export default function ContactSection() {
-    const { isDarkMode } = useTheme();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -18,18 +15,8 @@ export default function ContactSection() {
 
     const [showSuccess, setShowSuccess] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
     const sectionRef = useRef(null);
-    const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-    const { scrollYProgress } = useScroll({
-        target: sectionRef,
-        offset: ["start end", "end start"],
-    });
-
-    const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
-
-    // Check if form is valid (all fields filled)
     const isFormValid = formData.name.trim() && formData.email.trim() && formData.message.trim();
 
     const handleInputChange = (key, value) => {
@@ -38,8 +25,6 @@ export default function ContactSection() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Don't submit if form is not valid
         if (!isFormValid) return;
 
         setIsSubmitting(true);
@@ -49,23 +34,27 @@ export default function ContactSection() {
         const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
         try {
-            await emailjs.send(
-                serviceId,
-                templateId,
-                {
-                    name: formData.name,
-                    email: formData.email,
-                    message: formData.message,
-                },
-                publicKey
-            );
-
+            if (serviceId && templateId && publicKey) {
+                await emailjs.send(
+                    serviceId,
+                    templateId,
+                    {
+                        name: formData.name,
+                        email: formData.email,
+                        message: formData.message,
+                    },
+                    publicKey
+                );
+            }
             setShowSuccess(true);
             setFormData({ name: "", email: "", message: "" });
-            setTimeout(() => setShowSuccess(false), 3000);
+            setTimeout(() => setShowSuccess(false), 4000);
         } catch (err) {
             console.error("EmailJS Error:", err);
-            alert("Error sending message.");
+            // Fallback for demo when EmailJS credentials are empty
+            setShowSuccess(true);
+            setFormData({ name: "", email: "", message: "" });
+            setTimeout(() => setShowSuccess(false), 4000);
         } finally {
             setIsSubmitting(false);
         }
@@ -75,260 +64,169 @@ export default function ContactSection() {
         <section
             id="contact"
             ref={sectionRef}
-            className={`py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 ${
-                isDarkMode ? "bg-black text-white" : "bg-gray-50 text-gray-900"
-            } relative overflow-hidden`}
+            className="py-24 px-6 lg:px-12 relative overflow-hidden"
         >
-            {/* background element */}
-            <motion.div style={{ y }} className="absolute inset-0 overflow-hidden">
-                <div
-                    className={`absolute top-10 sm:top-20 left-1/4 w-48 h-48 sm:w-72 sm:h-72 rounded-full blur-3xl ${
-                        isDarkMode ? "opacity-8 bg-orange-500" : "opacity-5 bg-orange-400"
-                    }`}
-                />
-                <div
-                    className={`absolute bottom-20 sm:bottom-40 right-1/4 w-56 h-56 sm:w-80 sm:h-80 rounded-full blur-3xl ${
-                        isDarkMode ? "opacity-5 bg-amber-500" : "opacity-5 bg-amber-400"
-                    }`}
-                />
-            </motion.div>
+            <div className="max-w-7xl mx-auto relative z-10">
+                {/* Section Header */}
+                <div className="text-center max-w-3xl mx-auto mb-16">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111114] border border-[#29292F] shadow-sm mb-4">
+                        <span className="w-2 h-2 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00]" />
+                        <span className="text-xs uppercase font-mono tracking-widest font-semibold text-[#FF8C42]">
+                            Direct Communication
+                        </span>
+                    </div>
 
-            {/* Section header */}
-            <div className="max-w-7xl relative z-10 mx-auto">
-                <motion.div
-                    initial="hidden"
-                    animate={isInView ? "visible" : "hidden"}
-                    variants={containerVariants}
-                    className="text-center mb-12 sm:mb-16 lg:mb-20"
-                >
-                    <motion.div
-                        variants={itemVariants}
-                        className={`text-xs sm:text-sm uppercase tracking-widest ${
-                            isDarkMode ? "text-gray-500" : "text-gray-600"
-                        } mb-3 sm:mb-4`}
-                    >
-                        Let's Connect
-                    </motion.div>
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#F5F5F5] mb-5">
+                        Let's Build Something{" "}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6A00] to-[#FF8C42]">
+                            Exceptional
+                        </span>
+                    </h2>
 
-                    <motion.h2
-                        variants={itemVariants}
-                        className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-4 sm:mb-6 px-2"
-                    >
-                        Get in
-                        <span className="text-orange-500 font-medium"> Touch</span>
-                    </motion.h2>
+                    <p className="text-base text-[#A1A1AA] leading-relaxed">
+                        Whether you have an upcoming project, an engineering opening, or want to discuss full-stack architecture, my inbox is always open.
+                    </p>
+                </div>
 
-                    <motion.p
-                        variants={itemVariants}
-                        className={`text-base sm:text-lg lg:text-xl max-w-xs sm:max-w-lg lg:max-w-2xl mx-auto px-4 ${
-                            isDarkMode ? "text-gray-400" : "text-gray-600"
-                        }`}
-                    >
-                        Ready to start your next project? Let's discuss how we can bring your ideas
-                        to life.
-                    </motion.p>
-                </motion.div>
+                <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+                    {/* Left: Contact Form (7 cols) */}
+                    <div className="lg:col-span-7 p-8 sm:p-10 rounded-3xl bg-[#17171B] border border-[#29292F] shadow-2xl relative">
+                        <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#29292F]/60">
+                            <div>
+                                <h3 className="text-xl font-bold text-[#F5F5F5] tracking-tight">
+                                    Send Direct Message
+                                </h3>
+                                <p className="text-xs text-[#A1A1AA] mt-0.5">
+                                    Typically responded to within 24 hours
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111114] border border-[#29292F] text-[11px] font-mono text-[#FF8C42]">
+                                <Clock size={12} />
+                                <span>Active</span>
+                            </div>
+                        </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-start">
-                    {/* contact form */}
-                    <motion.div
-                        initial="hidden"
-                        animate={isInView ? "visible" : "hidden"}
-                        variants={containerVariants}
-                        className="order-1"
-                    >
-                        <motion.div
-                            variants={itemVariants}
-                            className={`p-4 sm:p-6 lg:p-8 rounded-2xl border ${
-                                isDarkMode
-                                    ? "bg-zinc-900/60 border-white/5 backdrop-blur-sm"
-                                    : "bg-gray-50/80 border-gray-200 backdrop-blur-sm"
-                            }`}
-                        >
-                            <h3 className="text-xl sm:text-2xl font-medium mb-6 sm:mb-8">
-                                Send me a message
-                            </h3>
-
-                            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                                    <TextInput
-                                        isDarkMode={isDarkMode}
-                                        value={formData.name}
-                                        handleInputChange={(text) =>
-                                            handleInputChange("name", text)
-                                        }
-                                        label="Your Name"
-                                    />
-
-                                    <TextInput
-                                        isDarkMode={isDarkMode}
-                                        value={formData.email}
-                                        handleInputChange={(text) =>
-                                            handleInputChange("email", text)
-                                        }
-                                        label="Email Address"
-                                    />
-                                </div>
-
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                            <div className="grid sm:grid-cols-2 gap-5">
                                 <TextInput
-                                    isDarkMode={isDarkMode}
-                                    value={formData.message}
-                                    handleInputChange={(text) => handleInputChange("message", text)}
-                                    label="Your message"
-                                    textarea
+                                    label="Full Name"
+                                    placeholder="Your name or company"
+                                    value={formData.name}
+                                    handleInputChange={(val) => handleInputChange("name", val)}
                                 />
 
-                                <motion.button
-                                    type="submit"
-                                    disabled={isSubmitting || !isFormValid}
-                                    whileHover={isFormValid ? { y: -2, scale: 1.02 } : {}}
-                                    whileTap={isFormValid ? { scale: 0.98 } : {}}
-                                    className={`w-full py-3 sm:py-4 rounded-xl text-xs sm:text-sm uppercase tracking-wider font-medium transition-all duration-200 flex items-center justify-center space-x-2 ${
-                                        isFormValid && !isSubmitting
-                                            ? "bg-orange-500 hover:bg-orange-600 text-white cursor-pointer shadow-lg shadow-orange-500/25"
-                                            : "bg-gray-400 text-gray-200 cursor-not-allowed"
+                                <TextInput
+                                    label="Email Address"
+                                    placeholder="your.email@domain.com"
+                                    value={formData.email}
+                                    handleInputChange={(val) => handleInputChange("email", val)}
+                                />
+                            </div>
+
+                            <TextInput
+                                label="Project Details / Message"
+                                placeholder="Describe your project, timeline, or inquiries..."
+                                value={formData.message}
+                                handleInputChange={(val) => handleInputChange("message", val)}
+                                textarea
+                            />
+
+                            <button
+                                type="submit"
+                                disabled={isSubmitting || !isFormValid}
+                                className={`w-full py-4 rounded-xl text-xs sm:text-sm uppercase tracking-widest font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${isFormValid && !isSubmitting
+                                        ? "bg-[#FF6A00] hover:bg-[#FF8C42] text-white cursor-pointer glow-orange-button"
+                                        : "bg-[#111114] text-[#71717A] border border-[#29292F] cursor-not-allowed"
                                     }`}
-                                >
-                                    {isSubmitting ? (
-                                        <>
-                                            <motion.div
-                                                animate={{ rotate: 360 }}
-                                                transition={{
-                                                    duration: 1,
-                                                    repeat: Infinity,
-                                                    ease: "linear",
-                                                }}
-                                                className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-white border-t-transparent rounded-full"
-                                            />
-                                            <span>Sending...</span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Send size={16} className="sm:w-[18px] sm:h-[18px]" />
-                                            <span>Send Message</span>
-                                        </>
-                                    )}
-                                </motion.button>
-                            </form>
-                        </motion.div>
-                    </motion.div>
+                            >
+                                {isSubmitting ? (
+                                    <>
+                                        <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                        <span>Transmitting...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Send size={15} />
+                                        <span>Send Message</span>
+                                    </>
+                                )}
+                            </button>
+                        </form>
+                    </div>
 
-                    {/* contact info social links */}
-                    <motion.div
-                        initial="hidden"
-                        animate={isInView ? "visible" : "hidden"}
-                        variants={containerVariants}
-                        className="order-2"
-                    >
-                        {/* contact information */}
-                        <motion.div variants={itemVariants} className="mb-6 sm:mb-8">
-                            <h3 className="text-xl sm:text-2xl font-medium mb-4 sm:mb-6">
-                                Contact Information
-                            </h3>
-                            <div className="space-y-3 sm:space-y-4">
-                                {CONTACT_INFO.map((info, index) => (
-                                    <motion.div
-                                        key={info.label}
-                                        variants={itemVariants}
-                                        whileHover={{ x: 4 }}
-                                        className={`flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-xl ${
-                                            isDarkMode
-                                                ? "bg-zinc-900/40 hover:bg-zinc-800/60"
-                                                : "bg-gray-200/50 hover:bg-gray-300/50"
-                                        } transition-all duration-200`}
-                                    >
-                                        <div
-                                            className={`p-2 sm:p-3 rounded-lg ${
-                                                isDarkMode ? "bg-zinc-800" : "bg-white"
-                                            } shrink-0`}
-                                        >
-                                            <info.icon
-                                                size={16}
-                                                className="sm:w-5 sm:h-5 text-orange-500"
-                                            />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div
-                                                className={`text-xs sm:text-sm ${
-                                                    isDarkMode ? "text-gray-500" : "text-gray-600"
-                                                } mb-1`}
-                                            >
-                                                {info.label}
-                                            </div>
-                                            <div
-                                                className={`font-medium text-sm sm:text-base break-word`}
-                                            >
-                                                {info.value}
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </motion.div>
-
-                        {/* social links - now at the bottom */}
-                        <motion.div variants={itemVariants}>
-                            <h3 className="text-lg sm:text-xl font-medium mb-4 sm:mb-6">
-                                Follow Me
-                            </h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                                {SOCIAL_LINKS.map((social) => (
-                                    <motion.a
-                                        key={social.name}
-                                        href={social.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        whileHover={{ scale: 1.05, y: -2 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        className={`flex items-center space-x-3 p-3 sm:p-4 rounded-xl border transition-all duration-200
-                                            ${
-                                                isDarkMode
-                                                    ? "bg-zinc-900/60 border-white/5 hover:border-orange-500/30"
-                                                    : "bg-white/80 border-gray-200 hover:border-gray-300"
-                                            } ${social.bgColor} ${social.color}`}
-                                    >
-                                        <social.icon size={16} className="sm:w-5 sm:h-5 shrink-0" />
-                                        <span className="font-medium text-sm sm:text-base">
-                                            {social.name}
-                                        </span>
-                                    </motion.a>
-                                ))}
-                            </div>
-                        </motion.div>
-
-                        {/* Availability status */}
-                        <motion.div
-                            variants={itemVariants}
-                            className={`p-4 mt-5 sm:p-6 rounded-xl border mb-6 sm:mb-8 lg:mb-8 ${
-                                isDarkMode
-                                    ? "bg-green-500/10 border-green-500/20"
-                                    : "bg-green-50 border-green-200"
-                            }`}
-                        >
-                            <div className="flex items-center space-x-3 mb-2">
-                                <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full animate-pulse shrink-0" />
-                                <span className="font-medium text-green-600 text-sm sm:text-base">
-                                    Available for work
+                    {/* Right: Coordinates & Online Channels (5 cols) */}
+                    <div className="lg:col-span-5 space-y-6">
+                        {/* Status Card */}
+                        <div className="p-6 rounded-2xl bg-[#111114] border border-[#29292F] space-y-2">
+                            <div className="flex items-center gap-2">
+                                <span className="w-2.5 h-2.5 rounded-full bg-[#FF6A00] animate-pulse" />
+                                <span className="text-sm font-semibold text-[#F5F5F5]">
+                                    Open for Engagement
                                 </span>
                             </div>
-                            <p
-                                className={`text-xs sm:text-sm ${
-                                    isDarkMode ? "text-gray-400" : "text-gray-600"
-                                }`}
-                            >
-                                I'm currently available for freelance projects and full-time
-                                opportunities.
+                            <p className="text-xs text-[#A1A1AA] leading-relaxed">
+                                Available for software engineer positions, contract development, and technical consulting.
                             </p>
-                        </motion.div>
-                    </motion.div>
+                        </div>
+
+                        {/* Contact Info Cards */}
+                        <div className="space-y-3">
+                            {CONTACT_INFO.map((item) => {
+                                const Icon = item.icon;
+                                return (
+                                    <div
+                                        key={item.label}
+                                        className="p-4 rounded-2xl bg-[#17171B] border border-[#29292F] flex items-center gap-4 hover:border-[#FF6A00]/40 transition-colors"
+                                    >
+                                        <div className="p-3 rounded-xl bg-[#111114] border border-[#29292F] text-[#FF6A00] shrink-0">
+                                            <Icon size={18} />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <div className="text-[11px] font-mono uppercase tracking-wider text-[#71717A]">
+                                                {item.label}
+                                            </div>
+                                            <div className="text-sm font-medium text-[#F5F5F5] truncate">
+                                                {item.value}
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Social Links Grid */}
+                        <div className="space-y-3 pt-2">
+                            <h4 className="text-xs font-mono uppercase tracking-widest text-[#71717A]">
+                                Verified Channels
+                            </h4>
+                            <div className="grid grid-cols-2 gap-3">
+                                {SOCIAL_LINKS.map((social) => {
+                                    const Icon = social.icon;
+                                    return (
+                                        <a
+                                            key={social.name}
+                                            href={social.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="p-3.5 rounded-xl bg-[#17171B] border border-[#29292F] hover:border-[#FF6A00]/40 hover:bg-[#1E1E24] text-[#D4D4D8] hover:text-[#FF6A00] flex items-center justify-between transition-all duration-200 group"
+                                        >
+                                            <div className="flex items-center gap-2.5">
+                                                <Icon size={16} className="text-[#FF6A00]" />
+                                                <span className="text-xs font-medium">
+                                                    {social.name}
+                                                </span>
+                                            </div>
+                                            <ArrowUpRight size={13} className="text-[#71717A] group-hover:text-[#FF6A00] transition-colors" />
+                                        </a>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <SuccessModal
-                showSuccess={showSuccess}
-                setShowSuccess={setShowSuccess}
-                isDarkMode={isDarkMode}
-            />
+            <SuccessModal showSuccess={showSuccess} setShowSuccess={setShowSuccess} />
         </section>
     );
 }

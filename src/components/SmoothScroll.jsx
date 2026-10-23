@@ -1,25 +1,8 @@
-import { useEffect } from "react";
-import Lenis from "@studio-freight/lenis";
-
+/**
+ * SmoothScroll component wrapper
+ * Preserves hardware-accelerated, native 60/120Hz browser scrolling without scroll-hijacking delays
+ */
 export default function SmoothScroll({ children }) {
-    useEffect(() => {
-        const lenis = new Lenis({
-            smooth: true,
-            lerp: 0.08,
-            wheelMultiplier: 1,
-        });
-
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-
-        requestAnimationFrame(raf);
-
-        return () => {
-            lenis.destroy();
-        };
-    }, []);
-
     return children;
 }
+

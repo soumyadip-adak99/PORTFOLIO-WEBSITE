@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle, X, Sparkles } from "lucide-react";
+import { CheckCircle2, X } from "lucide-react";
 
-export default function SuccessModal({ showSuccess, setShowSuccess, isDarkMode }) {
+export default function SuccessModal({ showSuccess, setShowSuccess }) {
     return (
         <AnimatePresence>
             {showSuccess && (
@@ -9,61 +9,36 @@ export default function SuccessModal({ showSuccess, setShowSuccess, isDarkMode }
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0B0B0D]/80 backdrop-blur-md"
                     onClick={() => setShowSuccess(false)}
                 >
                     <motion.div
-                        initial={{ scale: 0.8, opacity: 0, y: 20 }}
+                        initial={{ scale: 0.9, opacity: 0, y: 15 }}
                         animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.8, opacity: 0, y: 20 }}
-                        transition={{ type: "spring", duration: 0.5 }}
-                        className={`relative p-8 rounded-2xl border max-w-sm w-full text-center 
-                        ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"}`}
+                        exit={{ scale: 0.9, opacity: 0, y: 15 }}
+                        transition={{ type: "spring", duration: 0.4, damping: 25 }}
+                        className="relative p-8 rounded-3xl bg-[#17171B] border border-[#FF6A00]/40 max-w-sm w-full text-center shadow-[0_16px_48px_-8px_rgba(255,106,0,0.25)]"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
                             onClick={() => setShowSuccess(false)}
-                            className={`absolute top-4 right-4 p-1 rounded-full transition-colors
-                            ${isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}`}
+                            className="absolute top-4 right-4 p-1.5 rounded-full text-[#A1A1AA] hover:text-[#F5F5F5] hover:bg-[#111114] transition-colors"
+                            aria-label="Close dialog"
                         >
                             <X size={18} />
                         </button>
 
-                        <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ delay: 0.2, type: "spring" }}
-                            className="mx-auto w-16 h-16 bg-green-500 rounded-full flex items-center justify-center"
-                        >
-                            <CheckCircle size={32} className="text-white" />
-                        </motion.div>
+                        <div className="mx-auto w-14 h-14 bg-[#FF6A00]/15 border border-[#FF6A00]/40 rounded-2xl flex items-center justify-center text-[#FF6A00] mb-5 shadow-lg shadow-[#FF6A00]/20">
+                            <CheckCircle2 size={30} />
+                        </div>
 
-                        <motion.h3
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
-                            className="text-2xl font-medium mb-2"
-                        >
-                            Message Send!
-                        </motion.h3>
+                        <h3 className="text-xl font-bold text-[#F5F5F5] mb-2 tracking-tight">
+                            Message Received
+                        </h3>
 
-                        <motion.p
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4 }}
-                            className={`${isDarkMode ? "text-gray-400" : "text-gray-600"} mb-6`}
-                        >
-                            Thank you for reaching out! I'll get back to you within 24 hours.
-                        </motion.p>
-
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.5 }}
-                            className="flex justify-center"
-                        >
-                            <Sparkles className="text-yellow-500" size={24} />
-                        </motion.div>
+                        <p className="text-xs sm:text-sm text-[#A1A1AA] leading-relaxed">
+                            Thank you for reaching out! I've received your transmission and will respond promptly.
+                        </p>
                     </motion.div>
                 </motion.div>
             )}

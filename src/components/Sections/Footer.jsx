@@ -1,190 +1,75 @@
-import { useRef } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { Mail, Code2, ArrowUp } from "lucide-react";
-import { useTheme } from "../../context/ThemeContext";
+import { ArrowUp } from "lucide-react";
 import { FiGithub, FiLinkedin, FiTwitter } from "react-icons/fi";
-import { containerVariants, itemVariants } from "../../utils/helper";
+import { scrollToTop } from "../../utils/scrollHelper";
+import LOGO_IMG from "../../assets/logo.png";
+import ProtectedImage from "../ProtectedImage";
 
 export default function Footer() {
-    const { isDarkMode } = useTheme();
-    const footerRef = useRef(null);
-    const isInView = useInView(footerRef, { once: true, margin: "-50px" });
-    const { scrollYProgress } = useScroll();
-    const scrollY = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
-    const socialLinks = [
+    const socials = [
+        { icon: FiGithub, href: "https://github.com/soumyadip-adak99", label: "GitHub" },
         {
-            name: "GitHub",
-            icon: FiGithub,
-            url: "https://github.com/soumyadip-adak99",
-            color: "hover:text-gray-400",
-        },
-        {
-            name: "LinkedIn",
             icon: FiLinkedin,
-            url: "https://www.linkedin.com/in/soumyadip-adak-a19b03281/",
-            color: "hover:text-orange-400",
+            href: "https://www.linkedin.com/in/soumyadip-adak-a19b03281/",
+            label: "LinkedIn",
         },
-        {
-            name: "Twitter",
-            icon: FiTwitter,
-            url: "https://twitter.com",
-            color: "hover:text-sky-400",
-        },
-        {
-            name: "Email",
-            icon: Mail,
-            url: "work.soumyadipadak@gmail.com",
-            color: "hover:text-green-400",
-        },
+        { icon: FiTwitter, href: "https://twitter.com", label: "Twitter" },
     ];
 
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-
-    const AnimatedGradientLine = () => (
-        <div className="absolute top-0 left-0 w-full h-px overflow-hidden">
-            <motion.div
-                className={`h-px bg-linear-to-r ${
-                    isDarkMode
-                        ? "from-transparent via-orange-500 to-transparent"
-                        : "from-transparent via-orange-400 to-transparent"
-                }`}
-                initial={{ width: "0%", opacity: 0 }}
-                animate={isInView ? { width: "100%", opacity: 1 } : {}}
-                transition={{ duration: 1.5, ease: "easeInOut" }}
-            />
-
-            <motion.div
-                className={`absolute top-0 h-px w-32 bg-linear-to-r 
-                    ${
-                        isDarkMode
-                            ? "from-orange-400 via-amber-500 to-orange-400"
-                            : "from-orange-400 via-amber-400 to-orange-400"
-                    } blur-sm`}
-                animate={{ x: ["-50%", "calc(100vw + 50%)"] }}
-                transition={{
-                    x: {
-                        repeat: Infinity,
-                        repeatType: "loop",
-                        duration: 6,
-                        ease: "linear",
-                        delay: 1,
-                    },
-                }}
-            />
-        </div>
-    );
-
     return (
-        <footer
-            ref={footerRef}
-            className={`relative ${
-                isDarkMode ? "bg-black text-white" : "bg-white text-gray-900"
-            } overflow-hidden `}
-        >
-            {/* Animated wave/gradient line */}
-            <AnimatedGradientLine />
+        <footer className="relative border-t border-[#29292F] bg-[#0B0B0D] pt-14 pb-12 px-6 lg:px-12 overflow-hidden">
+            {/* Top Subtle Orange Laser Divider Glow */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-[1px] bg-gradient-to-r from-transparent via-[#FF6A00]/50 to-transparent" />
 
-            {/* Background element */}
-            <motion.div
-                style={{ y: scrollY }}
-                className="absolute inset-0 overflow pointer-events-none"
-            >
-                <div
-                    className={`absolute bottom-10 left-1/4 w-64 h-64 rounded-full blur-3xl ${
-                        isDarkMode ? "opacity-15 bg-orange-500" : "opacity-10 bg-orange-400"
-                    }`}
-                />
-                <div
-                    className={`absolute top-10 right-1/4 w-48 h-48 rounded-full blur-3xl ${
-                        isDarkMode ? "opacity-8 bg-amber-500" : "opacity-10 bg-amber-400"
-                    }`}
-                />
-            </motion.div>
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+                {/* Brand & Identity */}
+                <div className="flex items-center gap-3.5">
+                    <div className="w-9 h-9 rounded-xl bg-[#17171B] border border-[#29292F] flex items-center justify-center p-1.5 overflow-hidden shadow-md">
+                        <ProtectedImage
+                            src={LOGO_IMG}
+                            alt="Soumyadip Adak Logo"
+                            width={64}
+                            height={64}
+                            objectFit="contain"
+                        />
+                    </div>
+                    <div>
+                        <div className="text-sm font-semibold text-[#F5F5F5] tracking-tight">
+                            Soumyadip Adak
+                        </div>
+                    </div>
+                </div>
 
-            <div className="relative z-10 px-6 py-16">
-                <div className="max-w-6xl mx-auto">
-                    {/* Main footer content */}
-                    <motion.div
-                        initial="hidden"
-                        animate={isInView ? "visible" : "hidden"}
-                        variants={containerVariants}
-                        className="text-center space-y-8"
-                    >
-                        {/* Logo/brand */}
-                        <motion.div variants={itemVariants} className="space-y-4">
-                            <motion.div
-                                className="inline-flex items-center space-x-3"
-                                whileHover={{ scale: 1.05 }}
-                                transition={{ type: "spring", stiffness: 400 }}
-                            >
-                                <motion.div
-                                    animate={{ rotate: 360 }}
-                                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                                    className="text-orange-500"
-                                >
-                                    <Code2 size={28} />
-                                </motion.div>
-                                <span className="text-2xl font-semibold">Soumyadip Adak</span>
-                            </motion.div>
-
-                            <motion.p
-                                variants={itemVariants}
-                                className={`text-sm ${
-                                    isDarkMode ? "text-gray-400" : "text-gray-600"
-                                } max-w-md mx-auto`}
-                            >
-                                Crafting digital experiences with passion, precision, and a touch of
-                                magic.
-                            </motion.p>
-                        </motion.div>
-
-                        {/* Social Links */}
-                        <motion.div
-                            variants={itemVariants}
-                            className="flex justify-center space-x-6"
+                {/* Social Quick Links */}
+                <div className="flex items-center gap-2.5">
+                    {socials.map((item) => (
+                        <a
+                            key={item.label}
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={item.label}
+                            className="p-2.5 rounded-xl bg-[#111114] border border-[#29292F] text-[#A1A1AA] hover:text-[#FF6A00] hover:border-[#FF6A00]/40 transition-colors duration-200"
                         >
-                            {socialLinks.map((link, idx) => (
-                                <a
-                                    key={idx}
-                                    href={link.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className={`text-xl transition-colors duration-200 ${
-                                        isDarkMode ? "text-gray-500" : "text-gray-400"
-                                    } ${link.color}`}
-                                >
-                                    <link.icon />
-                                </a>
-                            ))}
-                        </motion.div>
+                            <item.icon size={16} />
+                        </a>
+                    ))}
+                </div>
 
-                        {/* Back to top */}
-                        <motion.button
-                            variants={itemVariants}
-                            onClick={scrollToTop}
-                            whileHover={{ y: -3, scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className={`mx-auto flex items-center space-x-2 text-sm font-medium border px-4 py-2 rounded-full transition-colors duration-200 ${
-                                isDarkMode
-                                    ? "border-white/10 hover:border-orange-500/50 hover:text-orange-400"
-                                    : "border-gray-300 hover:border-orange-400 hover:text-orange-500"
-                            }`}
-                        >
-                            <ArrowUp size={16} />
-                            <span>Back to Top</span>
-                        </motion.button>
+                {/* Return to Top Button */}
+                <button
+                    onClick={scrollToTop}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#17171B] border border-[#29292F] text-xs font-mono text-[#A1A1AA] hover:text-[#FF6A00] hover:border-[#FF6A00]/40 transition-colors duration-200 cursor-pointer shadow-sm"
+                >
+                    <ArrowUp size={14} />
+                    <span>Back to Top</span>
+                </button>
+            </div>
 
-                        {/* Copyright */}
-                        <motion.p
-                            variants={itemVariants}
-                            className={`text-xs ${isDarkMode ? "text-gray-600" : "text-gray-500"}`}
-                        >
-                            © {new Date().getFullYear()} Soumyadip Adak. All rights reserved.
-                        </motion.p>
-                    </motion.div>
+            {/* Copyright & Signoff */}
+            <div className="max-w-7xl mx-auto mt-10 pt-6 border-t border-[#1F1F24] flex items-center justify-center text-xs font-mono text-[#71717A]">
+                <div>
+                    © {new Date().getFullYear()} Soumyadip Adak. All rights reserved.
                 </div>
             </div>
         </footer>

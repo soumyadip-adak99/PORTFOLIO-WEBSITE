@@ -2,8 +2,6 @@ import {
     Code2,
     GraduationCap,
     Briefcase,
-    Award,
-    Rocket,
     Heart,
     Coffee,
     BookOpen,
@@ -13,17 +11,17 @@ import {
     Cloud,
     Mail,
     MapPin,
-    Phone,
 } from "lucide-react";
 
 import { FiGithub, FiLinkedin, FiTwitter, FiFacebook, FiInstagram } from "react-icons/fi";
 
-import PROJECT_IMG_1 from "../assets/project-1.png";
-import PROJECT_IMG_2 from "../assets/project-2.png";
-import PROJECT_IMG_3 from "../assets/project-3.png";
-import PROJECT_IMG_4 from "../assets/project-4.png";
-import PROJECT_IMG_5 from "../assets/project-5.png";
-import PROJECT_IMG_6 from "../assets/project-6.png";
+import PROJECT_IMG_CODEMIND from "../assets/banner_project.webp";
+import PROJECT_IMG_1 from "../assets/project-1.webp";
+import PROJECT_IMG_2 from "../assets/project-2.webp";
+import PROJECT_IMG_3 from "../assets/project-3.webp";
+import PROJECT_IMG_4 from "../assets/project-4.webp";
+import PROJECT_IMG_5 from "../assets/project-5.webp";
+import PROJECT_IMG_6 from "../assets/project-6.webp";
 
 export const SKILLS_CATEGORY = [
     {
@@ -31,47 +29,44 @@ export const SKILLS_CATEGORY = [
         icon: Code2,
         description: "Crafting beautiful, responsive user interfaces",
         skills: [
-            // { name: "HTML", level: 80, color: "bg-red-500" },
-            // { name: "CSS", level: 85, color: "bg-blue-600" },
-            // { name: "JS", level: 90, color: "bg-yellow-400" },
-            { name: "React", level: 80, color: "bg-orange-600" },
-            { name: "Tailwind Css", level: 90, color: "bg-orange-400" },
-            { name: "TypeScript", level: 60, color: "bg-orange-700" },
+            { name: "React", level: 85, color: "bg-gradient-to-r from-orange-500 to-amber-400" },
+            { name: "Tailwind CSS", level: 90, color: "bg-gradient-to-r from-amber-500 to-orange-500" },
+            { name: "TypeScript", level: 65, color: "bg-gradient-to-r from-orange-600 to-amber-400" },
+            { name: "JavaScript / ES6+", level: 90, color: "bg-gradient-to-r from-amber-400 to-orange-500" },
         ],
     },
 
     {
         title: "Backend",
         icon: Server,
-        description: "Building robust server-side solutions",
+        description: "Building robust, scalable server-side solutions",
         skills: [
-            { name: "Spring Boot", level: 90, color: "bg-green-500" },
-            // { name: "Python", level: 70, color: "bg-blue-500" },
-            { name: "Express.js", level: 60, color: "bg-gray-600" },
-            { name: "REST APIs", level: 92, color: "bg-orange-500" },
+            { name: "Spring Boot", level: 90, color: "bg-gradient-to-r from-orange-500 to-amber-500" },
+            { name: "REST APIs", level: 92, color: "bg-gradient-to-r from-amber-500 to-orange-400" },
+            { name: "Node.js & Express", level: 75, color: "bg-gradient-to-r from-orange-600 to-amber-500" },
         ],
     },
 
     {
         title: "Database",
         icon: Database,
-        description: "Developing and scaling applications",
+        description: "Designing high-performance data architectures",
         skills: [
-            { name: "MongoDB", level: 80, color: "bg-green-600" },
-            { name: "MySQL", level: 70, color: "bg-orange-700" },
-            { name: "PostgreSQL", level: 60, color: "bg-orange-400" },
-            // { name: "Redis", level: 65, color: "bg-red-500" }
+            { name: "MongoDB", level: 85, color: "bg-gradient-to-r from-orange-500 to-amber-400" },
+            { name: "MySQL", level: 75, color: "bg-gradient-to-r from-amber-500 to-orange-500" },
+            { name: "PostgreSQL", level: 70, color: "bg-gradient-to-r from-orange-600 to-amber-400" },
         ],
     },
 
     {
-        title: "DevOps",
+        title: "DevOps & Tools",
         icon: Cloud,
-        description: "Developing and scaling applications",
+        description: "Streamlining deployment and version workflows",
         skills: [
-            { name: "Docker", level: 80, color: "bg-orange-500" },
-            { name: "Vercel", level: 70, color: "bg-gray-600" },
-            { name: "Git", level: 95, color: "bg-orange-700" },
+            { name: "AWS Cloud", level: 80, color: "bg-gradient-to-r from-amber-500 to-orange-500" },
+            { name: "Docker", level: 80, color: "bg-gradient-to-r from-amber-500 to-orange-500" },
+            { name: "Git & GitHub", level: 95, color: "bg-gradient-to-r from-orange-500 to-amber-400" },
+            { name: "Vercel & Cloudflare", level: 85, color: "bg-gradient-to-r from-orange-600 to-amber-500" },
         ],
     },
 ];
@@ -89,6 +84,9 @@ export const TECH_STACK = [
     "MySQL",
     "MongoDB",
     "Redis",
+    "AWS",
+    "Docker",
+    "RAG",
 ];
 
 export const STATS = [
@@ -101,79 +99,171 @@ export const STATS = [
 export const PROJECTS = [
     {
         id: 1,
-        title: "Blog Application With AI Blog Scanner",
+        title: "CodeMind AI",
+        subtitle: "AI-Ready Knowledge Base & RAG Engine for GitHub Repositories",
         description:
-            "A full-stack blog-application to share new ideas and post recent latest news and etc.",
-        image: PROJECT_IMG_1,
-        tags: ["Spring Boot", "React", "Tailwind", "MongoDB"],
-        liveUrl: "https://codescribeai.pages.dev",
-        githubUrl: "https://github.com/soumyadip-adak99/codescribe-ai/",
+            "Architected a semantic codebase intelligence platform with Spring Boot 4, Spring AI, and PostgreSQL pgvector. Authenticates via GitHub OAuth2, crawls and chunks repository source code, computes high-dimensional vector embeddings, and enables natural-language RAG retrieval.",
+        image: PROJECT_IMG_CODEMIND,
         featured: true,
         category: "Full Stack",
+        stackCategory: "Spring Boot & AI",
+        techDetails: {
+            backend: "Spring Boot 4.1, Java 21, Spring AI 2.0, Spring Security (OAuth2)",
+            frontend: "Next.js 16 (App Router), React 19, TypeScript 5, Tailwind CSS 4",
+            database: "PostgreSQL 16 + pgvector (HNSW Indexing, Cosine Distance)",
+            architecture: "OAuth2 Flow, TokenTextSplitter, Async ThreadPool, Vector Embeddings",
+        },
+        tags: ["Spring Boot", "Spring AI", "pgvector", "RAG", "Next.js", "Docker", "PostgreSQL", "GitHub API"],
+        highlights: [
+            "GitHub OAuth2 & Repository Sync Pipeline",
+            "AST Code Chunker & Vector Embeddings",
+            "pgvector Semantic Search with HNSW Cosine Indexing",
+        ],
+        flagshipMetrics: [
+            "Spring Boot 4 & Spring AI",
+            "PostgreSQL 16 & pgvector",
+            "Next.js 16 & React 19 UI",
+        ],
+        liveUrl: "https://codemindai.vercel.app/",
+        githubUrl: "https://github.com/soumyadip-adak99/CodeMind",
+        status: "Production Live",
     },
-
     {
         id: 2,
-        title: "Remove Image Background",
-        description: "A full-stack remove image background - JAVA-FULLSTACK project",
-        image: PROJECT_IMG_2,
-        tags: ["Spring Boot", "React", "Tailwind", "PostgreSQL"],
-        liveUrl: "",
-        githubUrl:
-            "https://github.com/soumyadip-adak99/Remove-image-background-spring-boot-project/",
+        title: "CodeScribe AI",
+        subtitle: "Full-Stack Publishing Platform with AI Quality Inspection",
+        description:
+            "Architected a scalable content platform with Spring Boot RESTful microservices and MongoDB persistence, paired with a reactive React frontend and automated AI analysis pipelines.",
+        image: PROJECT_IMG_1,
         featured: true,
         category: "Full Stack",
+        stackCategory: "Java & Spring Boot",
+        techDetails: {
+            backend: "Spring Boot, Java 21, Spring Data",
+            frontend: "React 19, Tailwind CSS, Vite",
+            database: "MongoDB Atlas",
+            architecture: "RESTful Microservices, JWT Auth, AI Analysis & RAG",
+        },
+        tags: ["Spring Boot", "React", "MongoDB", "AI Scanner", "RAG", "REST APIs"],
+        highlights: ["Microservice Architecture", "Real-Time AI Inspection", "Document Persistence"],
+        flagshipMetrics: [
+            "Spring Boot Microservices",
+            "MongoDB Atlas Document Store",
+            "React 19 Reactive UI",
+        ],
+        liveUrl: "https://codescribeai.pages.dev",
+        githubUrl: "https://github.com/soumyadip-adak99/codescribe-ai/",
+        status: "Production Live",
     },
-
     {
         id: 3,
-        title: "E-Commerce Website",
-        description: "A fully functional E-Commerce website build in MERN stack",
-        image: PROJECT_IMG_6,
-        tags: ["MongoDB", "Express", "React", "Node.JS", "Tailwind"],
+        title: "Background Remover Engine",
+        subtitle: "Automated Image Segmentation & Blob Processing Service",
+        description:
+            "Engineered an image processing microservice in Java and Spring Boot with asynchronous image memory buffers, PostgreSQL relational tracking, and a fluid client interface.",
+        image: PROJECT_IMG_2,
+        featured: true,
+        category: "Full Stack",
+        stackCategory: "Java & Spring Boot",
+        techDetails: {
+            backend: "Java, Spring Boot, Spring Security",
+            frontend: "React, Tailwind CSS",
+            database: "PostgreSQL",
+            architecture: "Image Segmentation, Async Processing, Blob Handling",
+        },
+        tags: ["Java", "Spring Boot", "PostgreSQL", "Image Processing"],
+        highlights: ["Relational Schema Design", "Async Processing", "High-Fidelity Output"],
         liveUrl: "",
-        githubUrl: "https://github.com/soumyadip-adak99/mern-ecommerce-app",
-        featured: false,
-        category: "Web App",
+        githubUrl: "https://github.com/soumyadip-adak99/Remove-image-background-spring-boot-project/",
+        status: "Open Source",
     },
-
     {
         id: 4,
-        title: "Doctor Recommendation Web App",
+        title: "Nexus Commerce Platform",
+        subtitle: "Full-Featured MERN Multi-Tier E-Commerce System",
         description:
-            "This is a Machine Learning project this project recommended doctors according to the desies",
-        image: PROJECT_IMG_3,
-        tags: ["Python", "Flask", "HTML", "CSS"],
-        liveUrl: "",
-        githubUrl: "https://github.com/MrPal28/medical-ai-recommendation?tab=readme-ov-file",
-        featured: true,
+            "Architected an e-commerce infrastructure with Express.js routing, MongoDB document models, JWT session authentication, and transactional shopping cart state management.",
+        image: PROJECT_IMG_6,
+        featured: false,
         category: "Web App",
+        stackCategory: "MERN Stack",
+        techDetails: {
+            backend: "Node.js, Express.js",
+            frontend: "React, Tailwind CSS",
+            database: "MongoDB",
+            architecture: "Cart State Management, REST APIs, Token Authentication",
+        },
+        tags: ["MongoDB", "Express", "React", "Node.js", "Tailwind CSS"],
+        highlights: ["JWT Authentication", "Product Catalog", "Cart & Order Flow"],
+        liveUrl: "",
+        githubUrl: "https://github.com/soumyadip-adak99/mern-ecommerce-app",
+        status: "Open Source",
     },
-
     {
         id: 5,
-        title: "Portfolio Website",
+        title: "Medical AI Recommendation",
+        subtitle: "Disease Triage & Doctor Recommendation Model",
         description:
-            "This is my own portfolio web site that show case my projects and tell about me",
-        image: PROJECT_IMG_4,
-        tags: ["React", "Tailwind", "motion"],
-        liveUrl: "https://soumyadip-adak.pages.dev/",
-        githubUrl: "https://github.com/soumyadip-adak99/React_JS/tree/main/protfolio",
-        featured: true,
-        category: "Web App",
+            "Machine learning-assisted medical diagnosis and doctor recommendation system integrating Python Flask prediction endpoints with responsive clinical triage interfaces.",
+        image: PROJECT_IMG_3,
+        featured: false,
+        category: "AI & ML",
+        stackCategory: "Python & AI",
+        techDetails: {
+            backend: "Python, Flask",
+            frontend: "HTML5, CSS3, JavaScript",
+            database: "Medical Knowledge Graph",
+            architecture: "ML Classification Model, RESTful Inference API",
+        },
+        tags: ["Python", "Flask", "Machine Learning", "Healthcare AI"],
+        highlights: ["Predictive ML Models", "Symptom Analysis", "Doctor Matching"],
+        liveUrl: "",
+        githubUrl: "https://github.com/MrPal28/medical-ai-recommendation?tab=readme-ov-file",
+        status: "Research Model",
     },
-
     {
         id: 6,
-        title: "Personal Expense Tracker",
+        title: "FinanceFlow Wealth Engine",
+        subtitle: "Real-Time Personal Analytics & Wealth Dashboard",
         description:
-            "Personal Expense Tracker where you can track your daily and monthly expenses and vide the analytics",
+            "High-performance personal financial analytics web application featuring dynamic budget tracking, visual expenditure charts, and zero-latency reactive calculation engines.",
         image: PROJECT_IMG_5,
-        tags: ["React", "JavaScript", "TailwindCss"],
+        featured: false,
+        category: "Web App",
+        stackCategory: "React & Analytics",
+        techDetails: {
+            backend: "Client Analytics Engine",
+            frontend: "React, JavaScript, Tailwind CSS",
+            database: "Indexed Local Storage",
+            architecture: "Reactive Compute, Metric Visualization",
+        },
+        tags: ["React", "Analytics", "JavaScript", "Tailwind CSS"],
+        highlights: ["Real-Time Metrics", "Budget Forecasting", "Zero-Latency UI"],
         liveUrl: "https://financeflow-ebon.vercel.app/",
         githubUrl: "https://github.com/soumyadip-adak99/PERSONAL_EXPENSE_TRACKER",
-        featured: true,
+        status: "Production Live",
+    },
+    {
+        id: 7,
+        title: "Software Engineer Portfolio",
+        subtitle: "High-Performance Portfolio & 3D Interactive Console",
+        description:
+            "Modern software engineer portfolio built with React 19, Vite, and hardware-accelerated GPU animations, achieving sub-millisecond scroll latency and dark technical aesthetics.",
+        image: PROJECT_IMG_4,
+        featured: false,
         category: "Web App",
+        stackCategory: "React & Performance",
+        techDetails: {
+            backend: "Cloudflare Edge CDN",
+            frontend: "React 19, Tailwind CSS, Framer Motion",
+            database: "Static Pre-Compiled Assets",
+            architecture: "60/120Hz Hardware Scrolling, GPU Layering",
+        },
+        tags: ["React 19", "Tailwind CSS", "Vite", "Performance"],
+        highlights: ["Sub-ms Scroll Latency", "3D Interactive Orbit", "Dark Design System"],
+        liveUrl: "https://soumyadip-adak.pages.dev/",
+        githubUrl: "https://github.com/soumyadip-adak99/React_JS/tree/main/protfolio",
+        status: "Production Live",
     },
 ];
 
@@ -181,57 +271,38 @@ export const JOURNEY_STEPS = [
     {
         year: "2023",
         title: "Started Coding Journey",
-        company: "Self-taught",
+        company: "Self-taught & Foundations",
         description:
-            "Started programming with Java, explored problem solving, and began learning web development with HTML, CSS, and JavaScript.",
+            "Started programming with Java, explored algorithms and problem solving, and began mastering modern web development with HTML, CSS, and JavaScript.",
         icon: Code2,
-        color: "bg-orange-500",
+        color: "bg-gradient-to-br from-orange-500 to-amber-600",
     },
     {
         year: "2025",
         title: "First Internship",
-        company: "SPARK IIT.",
+        company: "SPARK IIT",
         description:
-            "Joined as a Full Stack Developer intern, working with React, Node.js, Express and learning modern development practices. Contributed to multiple client projects.",
+            "Joined as a Full Stack Developer intern, architecting solutions with React, Node.js, Express, and learning enterprise development best practices.",
         icon: Briefcase,
-        color: "bg-green-500",
+        color: "bg-gradient-to-br from-amber-500 to-orange-600",
     },
     {
         year: "2026",
         title: "Bachelor of Computer Application Degree",
         company: "Institute of Engineering and Management",
         description:
-            "Graduated with honors, specializing in web technologies and software engineering. Led the final year project on scalable web applications.",
+            "Graduated with honors, specializing in scalable software engineering and cloud systems. Spearheaded multiple high-impact web initiatives.",
         icon: GraduationCap,
-        color: "bg-purple-500",
+        color: "bg-gradient-to-br from-orange-600 to-amber-700",
     },
-    // {
-    //     year: "2024",
-    //     title: "Python & Machine Learning Project",
-    //     company: "College Project",
-    //     description:
-    //         "Developed a machine learning project in Python during college, applying data analysis, model building, and real-world problem-solving skills.",
-    //     icon: Rocket,
-    //     color: "bg-orange-500"
-    // },
-
-    // {
-    //     year: "2025",
-    //     title: "Full-Stack AI Web Application",
-    //     company: "Independent",
-    //     description:
-    //         "Built a high-level full-stack web application using Advanced Java, Spring Boot, and AI integration. Delivered a fully functional project and received an award for excellence.",
-    //     icon: Award,
-    //     color: "bg-pink-500"
-    // },
     {
-        year: "2025",
-        title: "Innovation & Technology Enthusiast",
-        company: "Innovate Tech",
+        year: "Present",
+        title: "Innovation & Full Stack Engineering",
+        company: "Independent Projects & Open Source",
         description:
-            "Working on multiple projects showcased on my website, staying up-to-date with industry trends, and continuously learning new technologies.",
+            "Architecting full-stack applications with Spring Boot, React, and AI integrations, pushing boundaries with clean UI/UX and high-performance backends.",
         icon: Zap,
-        color: "bg-cyan-500",
+        color: "bg-gradient-to-br from-amber-400 to-orange-500",
     },
 ];
 
@@ -239,17 +310,17 @@ export const PASSIONS = [
     {
         icon: Heart,
         title: "User Experience",
-        description: "Crafting intuitive interfaces that users love",
+        description: "Crafting intuitive, silky smooth interfaces that users fall in love with",
     },
     {
         icon: Coffee,
         title: "Problem Solving",
-        description: "Turning complex challenges into elegant solutions",
+        description: "Turning complex architectural challenges into elegant, maintainable solutions",
     },
     {
         icon: BookOpen,
-        title: "Continuous Learning",
-        description: "Always exploring new technologies and best practices",
+        title: "Continuous Innovation",
+        description: "Constantly exploring new tech stacks, performance patterns, and modern design",
     },
 ];
 
@@ -258,8 +329,8 @@ export const SOCIAL_LINKS = [
         name: "GitHub",
         icon: FiGithub,
         url: "https://github.com/soumyadip-adak99",
-        color: "hover:text-gray-400",
-        bgColor: "hover:bg-gray-800",
+        color: "hover:text-orange-400",
+        bgColor: "hover:bg-orange-500/10",
     },
     {
         name: "LinkedIn",
@@ -272,29 +343,29 @@ export const SOCIAL_LINKS = [
         name: "Twitter",
         icon: FiTwitter,
         url: "https://twitter.com",
-        color: "hover:text-sky-400",
-        bgColor: "hover:bg-sky-500/10",
+        color: "hover:text-orange-400",
+        bgColor: "hover:bg-orange-500/10",
     },
     {
         name: "Email",
         icon: Mail,
-        url: "work.soumyadipadak@gmail.com",
-        color: "hover:text-green-400",
-        bgColor: "hover:bg-green-500/10",
+        url: "mailto:work.soumyadipadak@gmail.com",
+        color: "hover:text-orange-400",
+        bgColor: "hover:bg-orange-500/10",
     },
     {
         name: "Facebook",
         icon: FiFacebook,
         url: "https://www.facebook.com/soumyadip.adak.99",
-        color: "hover:text-blue-500",
-        bgColor: "hover:bg-blue-600/10",
+        color: "hover:text-orange-400",
+        bgColor: "hover:bg-orange-500/10",
     },
     {
         name: "Instagram",
         icon: FiInstagram,
         url: "https://www.instagram.com/soumyadip_adak8888/",
-        color: "hover:text-pink-400",
-        bgColor: "hover:bg-pink-400/10",
+        color: "hover:text-orange-400",
+        bgColor: "hover:bg-orange-500/10",
     },
 ];
 
@@ -309,9 +380,4 @@ export const CONTACT_INFO = [
         label: "Email",
         value: "work.soumyadipadak@gmail.com",
     },
-    // {
-    //     icon: Phone,
-    //     label: "Phone",
-    //     value: "+91 (555) 123-4567",
-    // },
 ];
