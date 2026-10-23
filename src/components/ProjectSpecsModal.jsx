@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ExternalLink, Layers, CheckCircle2, Database, Server } from "lucide-react";
+import { X, ExternalLink, Layers, CheckCircle2, ShieldCheck, Database, Server, Cpu } from "lucide-react";
 import { FiGithub } from "react-icons/fi";
 
 export default function ProjectSpecsModal({ project, isOpen, onClose }) {
