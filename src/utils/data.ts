@@ -23,7 +23,17 @@ import PROJECT_IMG_4 from "../assets/project-4.webp";
 import PROJECT_IMG_5 from "../assets/project-5.webp";
 import PROJECT_IMG_6 from "../assets/project-6.webp";
 
-export const SKILLS_CATEGORY = [
+import {
+    SkillCategory,
+    StatItem,
+    Project,
+    JourneyStep,
+    Passion,
+    SocialLink,
+    ContactInfo,
+} from "../types";
+
+export const SKILLS_CATEGORY: SkillCategory[] = [
     {
         title: "Frontend",
         icon: Code2,
@@ -71,7 +81,7 @@ export const SKILLS_CATEGORY = [
     },
 ];
 
-export const TECH_STACK = [
+export const TECH_STACK: string[] = [
     "Java",
     "Python",
     "JavaScript",
@@ -89,14 +99,14 @@ export const TECH_STACK = [
     "RAG",
 ];
 
-export const STATS = [
+export const STATS: StatItem[] = [
     { number: "8+", label: "Projects Completed" },
     { number: "2+", label: "Years Experience" },
     { number: "10+", label: "Technologies" },
     { number: "100%", label: "Project Solution" },
 ];
 
-export const PROJECTS = [
+export const PROJECTS: Project[] = [
     {
         id: 1,
         title: "CodeMind AI",
@@ -267,7 +277,7 @@ export const PROJECTS = [
     },
 ];
 
-export const JOURNEY_STEPS = [
+export const JOURNEY_STEPS: JourneyStep[] = [
     {
         year: "2023",
         title: "Started Coding Journey",
@@ -306,7 +316,7 @@ export const JOURNEY_STEPS = [
     },
 ];
 
-export const PASSIONS = [
+export const PASSIONS: Passion[] = [
     {
         icon: Heart,
         title: "User Experience",
@@ -324,7 +334,7 @@ export const PASSIONS = [
     },
 ];
 
-export const SOCIAL_LINKS = [
+export const SOCIAL_LINKS: SocialLink[] = [
     {
         name: "GitHub",
         icon: FiGithub,
@@ -369,7 +379,7 @@ export const SOCIAL_LINKS = [
     },
 ];
 
-export const CONTACT_INFO = [
+export const CONTACT_INFO: ContactInfo[] = [
     {
         icon: MapPin,
         label: "Location",

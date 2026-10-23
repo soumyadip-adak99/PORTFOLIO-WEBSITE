@@ -6,9 +6,9 @@ import { scrollToSection } from "../../utils/scrollHelper";
 import ProtectedImage from "../ProtectedImage";
 
 export default function AboutSection() {
-    const sectionRef = useRef(null);
+    const sectionRef = useRef<HTMLElement | null>(null);
 
-    const scrollTo = (id) => {
+    const scrollTo = (id: string) => {
         scrollToSection(id, -75);
     };
 
@@ -121,7 +121,6 @@ export default function AboutSection() {
 
                         <div className="relative pl-6 space-y-8 before:absolute before:left-2.5 before:top-3 before:bottom-3 before:w-[2px] before:bg-gradient-to-b before:from-[#FF6A00] before:via-[#FF8C42]/50 before:to-[#29292F]">
                             {JOURNEY_STEPS.map((step, idx) => {
-                                const Icon = step.icon;
                                 return (
                                     <div key={idx} className="relative group">
                                         {/* Glowing Timeline Node */}

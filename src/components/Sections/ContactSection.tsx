@@ -1,31 +1,37 @@
-import { useState, useRef } from "react";
+import { useState, useRef, FormEvent } from "react";
 import { Send, Clock, ArrowUpRight } from "lucide-react";
 import TextInput from "../Input/TextInput";
 import SuccessModal from "../SuccessModal";
 import { CONTACT_INFO, SOCIAL_LINKS } from "../../utils/data";
 import emailjs from "@emailjs/browser";
 
+interface ContactFormData {
+    name: string;
+    email: string;
+    message: string;
+}
+
 // Direct inquiry and messaging portal
 export default function ContactSection() {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<ContactFormData>({
         name: "",
         email: "",
         message: "",
     });
 
-    const [showSuccess, setShowSuccess] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const sectionRef = useRef(null);
+    const [showSuccess, setShowSuccess] = useState<boolean>(false);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const sectionRef = useRef<HTMLElement | null>(null);
 
-    const isFormValid = formData.name.trim() && formData.email.trim() && formData.message.trim();
+    const isFormValid = Boolean(formData.name.trim() && formData.email.trim() && formData.message.trim());
 
-    const handleInputChange = (key, value) => {
+    const handleInputChange = (key: keyof ContactFormData, value: string) => {
         setFormData((prev) => ({ ...prev, [key]: value }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        if (!isFormValid) return;
+        if (!isFormValid || isSubmitting) return;
 
         setIsSubmitting(true);
 
@@ -134,10 +140,11 @@ export default function ContactSection() {
                             <button
                                 type="submit"
                                 disabled={isSubmitting || !isFormValid}
-                                className={`w-full py-4 rounded-xl text-xs sm:text-sm uppercase tracking-widest font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${isFormValid && !isSubmitting
+                                className={`w-full py-4 rounded-xl text-xs sm:text-sm uppercase tracking-widest font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${
+                                    isFormValid && !isSubmitting
                                         ? "bg-[#FF6A00] hover:bg-[#FF8C42] text-white cursor-pointer glow-orange-button"
                                         : "bg-[#111114] text-[#71717A] border border-[#29292F] cursor-not-allowed"
-                                    }`}
+                                }`}
                             >
                                 {isSubmitting ? (
                                     <>

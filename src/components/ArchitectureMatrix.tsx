@@ -21,10 +21,10 @@ import {
     Cloud,
     Workflow,
     Layers,
-    ShieldCheck,
 } from "lucide-react";
+import { StackPillar, PipelineStep, TechnologyItem } from "../types";
 
-const STACK_PILLARS = [
+const STACK_PILLARS: StackPillar[] = [
     {
         title: "Backend Core",
         icon: Server,
@@ -187,7 +187,7 @@ const STACK_PILLARS = [
     },
 ];
 
-const PIPELINE_FLOW = [
+const PIPELINE_FLOW: PipelineStep[] = [
     { step: "01", name: "Client Layer", tech: "React 19 + TypeScript", color: "#61DAFB" },
     { step: "02", name: "Security & API", tech: "REST + JWT Auth", color: "#FF8C42" },
     { step: "03", name: "Core Engine", tech: "Spring Boot (Java 21)", color: "#6DB33F" },
@@ -196,8 +196,8 @@ const PIPELINE_FLOW = [
 ];
 
 export default function ArchitectureMatrix() {
-    const [viewMode, setViewMode] = useState("grid"); // 'grid' | 'pipeline'
-    const [activeHover, setActiveHover] = useState(null);
+    const [viewMode, setViewMode] = useState<"grid" | "pipeline">("grid");
+    const [activeHover, setActiveHover] = useState<TechnologyItem | null>(null);
 
     return (
         <div className="w-full space-y-5">

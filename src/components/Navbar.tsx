@@ -7,12 +7,17 @@ import { scrollToSection, scrollToTop } from "../utils/scrollHelper";
 import LOGO_IMG from "../assets/logo.png";
 import ProtectedImage from "./ProtectedImage";
 
-export default function Navbar() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
-    const [activeSection, setActiveSection] = useState("home");
+interface NavItem {
+    label: string;
+    id: string;
+}
 
-    const navItems = [
+export default function Navbar() {
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+    const [scrolled, setScrolled] = useState<boolean>(false);
+    const [activeSection, setActiveSection] = useState<string>("home");
+
+    const navItems: NavItem[] = [
         { label: "Home", id: "home" },
         { label: "Skills", id: "skills" },
         { label: "Work", id: "work" },
@@ -72,7 +77,7 @@ export default function Navbar() {
         };
     }, [isMenuOpen]);
 
-    const scrollTo = (id) => {
+    const scrollTo = (id: string) => {
         setIsMenuOpen(false);
         if (id === "home") {
             scrollToTop();
@@ -94,10 +99,11 @@ export default function Navbar() {
         <>
             <header
                 style={{ transform: "translateZ(0)" }}
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-                    ? "bg-[#0B0B0D]/90 backdrop-blur-md border-b border-[#29292F]/80 shadow-[0_4px_30px_rgba(0,0,0,0.6)]"
-                    : "bg-transparent border-b border-transparent"
-                    }`}
+                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+                    scrolled
+                        ? "bg-[#0B0B0D]/90 backdrop-blur-md border-b border-[#29292F]/80 shadow-[0_4px_30px_rgba(0,0,0,0.6)]"
+                        : "bg-transparent border-b border-transparent"
+                }`}
             >
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
                     {/* Brand Identifier */}
@@ -130,10 +136,11 @@ export default function Navbar() {
                                 <button
                                     key={id}
                                     onClick={() => scrollTo(id)}
-                                    className={`relative px-4 py-2 text-xs uppercase tracking-wider font-medium transition-all duration-200 cursor-pointer rounded-full focus:outline-none ${isActive
-                                        ? "text-[#F5F5F5] font-semibold"
-                                        : "text-[#A1A1AA] hover:text-[#F5F5F5] hover:bg-[#17171B]"
-                                        }`}
+                                    className={`relative px-4 py-2 text-xs uppercase tracking-wider font-medium transition-all duration-200 cursor-pointer rounded-full focus:outline-none ${
+                                        isActive
+                                            ? "text-[#F5F5F5] font-semibold"
+                                            : "text-[#A1A1AA] hover:text-[#F5F5F5] hover:bg-[#17171B]"
+                                    }`}
                                 >
                                     {label}
                                     {isActive && (
@@ -206,10 +213,11 @@ export default function Navbar() {
                                     <button
                                         key={id}
                                         onClick={() => scrollTo(id)}
-                                        className={`w-full text-left py-4 px-5 rounded-xl text-lg font-medium transition-all ${isActive
-                                            ? "bg-[#17171B] text-[#FF6A00] border border-[#FF6A00]/30 font-semibold"
-                                            : "text-[#A1A1AA] hover:text-[#F5F5F5] hover:bg-[#111114]"
-                                            }`}
+                                        className={`w-full text-left py-4 px-5 rounded-xl text-lg font-medium transition-all ${
+                                            isActive
+                                                ? "bg-[#17171B] text-[#FF6A00] border border-[#FF6A00]/30 font-semibold"
+                                                : "text-[#A1A1AA] hover:text-[#F5F5F5] hover:bg-[#111114]"
+                                        }`}
                                     >
                                         <div className="flex items-center justify-between">
                                             <span>{label}</span>

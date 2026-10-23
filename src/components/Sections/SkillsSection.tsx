@@ -4,7 +4,7 @@ import ArchitectureMatrix from "../ArchitectureMatrix";
 import { Cpu, Terminal } from "lucide-react";
 
 export default function SkillsSection() {
-    const sectionRef = useRef(null);
+    const sectionRef = useRef<HTMLElement | null>(null);
 
     return (
         <section

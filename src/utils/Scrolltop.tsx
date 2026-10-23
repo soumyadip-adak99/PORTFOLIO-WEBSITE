@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
-function Scrolltop() {
+export default function Scrolltop(): null {
     const location = useLocation();
 
     useEffect(() => {
@@ -10,6 +10,3 @@ function Scrolltop() {
 
     return null;
 }
-
-export default Scrolltop;
-

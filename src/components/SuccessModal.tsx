@@ -1,7 +1,12 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, X } from "lucide-react";
 
-export default function SuccessModal({ showSuccess, setShowSuccess }) {
+interface SuccessModalProps {
+    showSuccess: boolean;
+    setShowSuccess: (show: boolean) => void;
+}
+
+export default function SuccessModal({ showSuccess, setShowSuccess }: SuccessModalProps) {
     return (
         <AnimatePresence>
             {showSuccess && (

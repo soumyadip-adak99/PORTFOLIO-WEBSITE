@@ -5,7 +5,6 @@ import LOGO_IMG from "../../assets/logo.png";
 import ProtectedImage from "../ProtectedImage";
 
 export default function Footer() {
-
     const socials = [
         { icon: FiGithub, href: "https://github.com/soumyadip-adak99", label: "GitHub" },
         {

@@ -1,8 +1,14 @@
 import { ExternalLink, Sparkles, Layers, CheckCircle2 } from "lucide-react";
 import { FiGithub } from "react-icons/fi";
 import ProtectedImage from "./ProtectedImage";
+import { Project } from "../types";
 
-export default function ProjectCard({ project, onOpenSpecs }) {
+interface ProjectCardProps {
+    project: Project;
+    onOpenSpecs?: (project: Project) => void;
+}
+
+export default function ProjectCard({ project, onOpenSpecs }: ProjectCardProps) {
     const hasLive = Boolean(project.liveUrl);
     const hasRepo = Boolean(project.githubUrl);
 

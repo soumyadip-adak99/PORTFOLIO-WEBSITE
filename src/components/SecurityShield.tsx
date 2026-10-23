@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 
 export default function SecurityShield() {
-    const [isBlackout, setIsBlackout] = useState(false);
-    const lastModifierTimeRef = useRef(0);
-    const blackoutTimeoutRef = useRef(null);
+    const [isBlackout, setIsBlackout] = useState<boolean>(false);
+    const lastModifierTimeRef = useRef<number>(0);
+    const blackoutTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
         // Trigger temporary blackout when screenshot/print is attempted
-        const triggerBlackout = (duration = 2500) => {
+        const triggerBlackout = (duration: number = 2500) => {
             setIsBlackout(true);
 
             // Attempt to clear or overwrite clipboard to prevent pasting captured snips
@@ -29,7 +29,7 @@ export default function SecurityShield() {
         };
 
         // Track modifier keys for external snipping tool blur detection
-        const handleKeyDown = (e) => {
+        const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Shift" || e.key === "Meta" || e.key === "Control" || e.key === "Alt") {
                 lastModifierTimeRef.current = Date.now();
             }
@@ -96,7 +96,7 @@ export default function SecurityShield() {
         };
 
         // Keyup listener for PrintScreen (on Windows PrtScn often fires on keyup)
-        const handleKeyUp = (e) => {
+        const handleKeyUp = (e: KeyboardEvent) => {
             if (e.key === "PrintScreen" || e.keyCode === 44 || e.code === "PrintScreen") {
                 triggerBlackout(3000);
             }
@@ -111,17 +111,18 @@ export default function SecurityShield() {
         };
 
         // Global context menu (right-click) prevention on images, canvases, and media
-        const handleContextMenu = (e) => {
-            const target = e.target;
+        const handleContextMenu = (e: MouseEvent) => {
+            const target = e.target as HTMLElement | null;
+            if (!target) return;
             if (
                 target.tagName === "IMG" ||
                 target.tagName === "CANVAS" ||
                 target.tagName === "PICTURE" ||
                 target.tagName === "SVG" ||
-                target.closest(".protected-asset") ||
-                target.closest(".hero-card-container") ||
-                target.closest(".project-media-frame") ||
-                target.closest("article")
+                target.closest?.(".protected-asset") ||
+                target.closest?.(".hero-card-container") ||
+                target.closest?.(".project-media-frame") ||
+                target.closest?.("article")
             ) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -130,14 +131,15 @@ export default function SecurityShield() {
         };
 
         // Global drag-start prevention on media
-        const handleDragStart = (e) => {
-            const target = e.target;
+        const handleDragStart = (e: DragEvent) => {
+            const target = e.target as HTMLElement | null;
+            if (!target) return;
             if (
                 target.tagName === "IMG" ||
                 target.tagName === "CANVAS" ||
                 target.tagName === "PICTURE" ||
                 target.tagName === "SVG" ||
-                target.closest(".protected-asset")
+                target.closest?.(".protected-asset")
             ) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -203,4 +205,3 @@ export default function SecurityShield() {
         </div>
     );
 }
-

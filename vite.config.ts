@@ -11,7 +11,7 @@ export default defineConfig({
                 entryFileNames: "assets/core-[hash].js",
                 chunkFileNames: "assets/system-[hash].js",
                 assetFileNames: "assets/theme-[hash].[ext]",
-                manualChunks(id) {
+                manualChunks(id: string) {
                     if (id.includes("framer-motion") || id.includes("gsap")) {
                         return "motion-engine";
                     }

@@ -16,13 +16,14 @@ import {
     ChevronUp,
 } from "lucide-react";
 import { FiGithub } from "react-icons/fi";
+import { Project } from "../../types";
 
 export default function ProjectsSection() {
-    const [activeCategory, setActiveCategory] = useState("All");
-    const [selectedProject, setSelectedProject] = useState(null);
-    const [isSpecsOpen, setIsSpecsOpen] = useState(false);
-    const [showAll, setShowAll] = useState(false);
-    const sectionRef = useRef(null);
+    const [activeCategory, setActiveCategory] = useState<string>("All");
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const [isSpecsOpen, setIsSpecsOpen] = useState<boolean>(false);
+    const [showAll, setShowAll] = useState<boolean>(false);
+    const sectionRef = useRef<HTMLElement | null>(null);
 
     const categories = [
         { label: "All Systems", value: "All", count: PROJECTS.length },
@@ -42,12 +43,12 @@ export default function ProjectsSection() {
     // Flagship featured project (CodeMind AI)
     const flagshipProject = PROJECTS.find((p) => p.featured) || PROJECTS[0];
 
-    const handleOpenSpecs = (project) => {
+    const handleOpenSpecs = (project: Project) => {
         setSelectedProject(project);
         setIsSpecsOpen(true);
     };
 
-    const handleCategoryChange = (category) => {
+    const handleCategoryChange = (category: string) => {
         setActiveCategory(category);
         setShowAll(false);
     };
@@ -175,9 +176,11 @@ export default function ProjectsSection() {
                                     <h3 className="text-2xl sm:text-3xl font-bold text-[#F5F5F5] tracking-tight">
                                         {flagshipProject.title}
                                     </h3>
-                                    <p className="text-xs font-mono text-[#FF8C42] mt-1">
-                                        {flagshipProject.subtitle}
-                                    </p>
+                                    {flagshipProject.subtitle && (
+                                        <p className="text-xs font-mono text-[#FF8C42] mt-1">
+                                            {flagshipProject.subtitle}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <p className="text-xs sm:text-sm text-[#A1A1AA] leading-relaxed">
@@ -185,14 +188,16 @@ export default function ProjectsSection() {
                                 </p>
 
                                 {/* Highlights with Checkmarks */}
-                                <div className="space-y-2 pt-2">
-                                    {flagshipProject.highlights.map((item) => (
-                                        <div key={item} className="flex items-center gap-2 text-xs text-[#D4D4D8]">
-                                            <CheckCircle2 size={14} className="text-[#FF6A00] shrink-0" />
-                                            <span>{item}</span>
-                                        </div>
-                                    ))}
-                                </div>
+                                {flagshipProject.highlights && (
+                                    <div className="space-y-2 pt-2">
+                                        {flagshipProject.highlights.map((item) => (
+                                            <div key={item} className="flex items-center gap-2 text-xs text-[#D4D4D8]">
+                                                <CheckCircle2 size={14} className="text-[#FF6A00] shrink-0" />
+                                                <span>{item}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
 
                                 {/* Tech Tags */}
                                 <div className="pt-2 flex flex-wrap gap-1.5">

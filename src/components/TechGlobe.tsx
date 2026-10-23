@@ -17,8 +17,9 @@ import {
 } from "react-icons/si";
 import { FaJava, FaAws } from "react-icons/fa";
 import { Sparkles, Compass } from "lucide-react";
+import { TechGlobeItem } from "../types";
 
-const TECHNOLOGIES = [
+const TECHNOLOGIES: TechGlobeItem[] = [
     {
         name: "Java",
         category: "Core Language",
@@ -149,30 +150,37 @@ const TECHNOLOGIES = [
     },
 ];
 
+interface SphereCoord {
+    x: number;
+    y: number;
+    z: number;
+    tech: TechGlobeItem;
+}
+
 export default function TechGlobe() {
-    const containerRef = useRef(null);
-    const nodeRefs = useRef([]);
-    const [hoveredTech, setHoveredTech] = useState(null);
-    const hoveredTechRef = useRef(null);
-    const isVisibleRef = useRef(false);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const nodeRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const [hoveredTech, setHoveredTech] = useState<TechGlobeItem | null>(null);
+    const hoveredTechRef = useRef<string | null>(null);
+    const isVisibleRef = useRef<boolean>(false);
 
     // Rotation angles in radians
-    const rotX = useRef(0.2);
-    const rotY = useRef(0.3);
-    const targetRotX = useRef(0.2);
-    const targetRotY = useRef(0.3);
-    const lastMousePos = useRef({ x: 0, y: 0 });
-    const isDragging = useRef(false);
-    const animFrameId = useRef(null);
+    const rotX = useRef<number>(0.2);
+    const rotY = useRef<number>(0.3);
+    const targetRotX = useRef<number>(0.2);
+    const targetRotY = useRef<number>(0.3);
+    const lastMousePos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+    const isDragging = useRef<boolean>(false);
+    const animFrameId = useRef<number | null>(null);
 
     // Radius of the sphere in px (responsive)
-    const radiusRef = useRef(175);
-    const baseCoords = useRef([]);
+    const radiusRef = useRef<number>(175);
+    const baseCoords = useRef<SphereCoord[]>([]);
 
     // Precompute Fibonacci sphere base coordinates once
     useEffect(() => {
         const n = TECHNOLOGIES.length;
-        const coords = [];
+        const coords: SphereCoord[] = [];
         const goldenRatio = (1 + Math.sqrt(5)) / 2;
 
         for (let i = 0; i < n; i++) {
@@ -207,11 +215,11 @@ export default function TechGlobe() {
     }, []);
 
     // Pointer move over container
-    const handlePointerMove = useCallback((e) => {
+    const handlePointerMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         if (!containerRef.current) return;
         const rect = containerRef.current.getBoundingClientRect();
-        const clientX = e.clientX || (e.touches && e.touches[0]?.clientX) || 0;
-        const clientY = e.clientY || (e.touches && e.touches[0]?.clientY) || 0;
+        const clientX = e.clientX;
+        const clientY = e.clientY;
 
         if (isDragging.current) {
             const dx = clientX - lastMousePos.current.x;
@@ -227,7 +235,7 @@ export default function TechGlobe() {
         }
     }, []);
 
-    const handlePointerDown = (e) => {
+    const handlePointerDown = (e: React.MouseEvent<HTMLDivElement>) => {
         isDragging.current = true;
         lastMousePos.current = { x: e.clientX, y: e.clientY };
     };
@@ -237,13 +245,13 @@ export default function TechGlobe() {
     };
 
     // Mobile touch handling: only rotate on horizontal drag, allow vertical page scroll
-    const handleTouchStart = (e) => {
+    const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
         if (e.touches && e.touches[0]) {
             lastMousePos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
         }
     };
 
-    const handleTouchMove = (e) => {
+    const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
         if (!e.touches || !e.touches[0]) return;
         const clientX = e.touches[0].clientX;
         const clientY = e.touches[0].clientY;
@@ -374,7 +382,7 @@ export default function TechGlobe() {
                 className="relative w-full max-w-[540px] h-[460px] sm:h-[500px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none overflow-hidden touch-pan-y"
                 style={{ perspective: "1000px" }}
             >
-                {/* Central Soft Orange Atmospheric Glow - Multi-layered diffused celestial lighting */}
+                {/* Central Soft Orange Atmospheric Glow */}
                 <div
                     className="absolute w-[360px] h-[360px] sm:w-[440px] sm:h-[440px] rounded-full pointer-events-none"
                     style={{
@@ -418,7 +426,9 @@ export default function TechGlobe() {
                     return (
                         <div
                             key={tech.name}
-                            ref={(el) => (nodeRefs.current[idx] = el)}
+                            ref={(el) => {
+                                nodeRefs.current[idx] = el;
+                            }}
                             onMouseEnter={() => {
                                 hoveredTechRef.current = tech.name;
                                 setHoveredTech(tech);
@@ -508,4 +518,3 @@ export default function TechGlobe() {
         </div>
     );
 }
-

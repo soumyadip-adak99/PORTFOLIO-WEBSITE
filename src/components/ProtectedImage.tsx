@@ -1,5 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 
+interface ProtectedImageProps {
+    src: string;
+    alt?: string;
+    className?: string;
+    canvasClassName?: string;
+    width?: number;
+    height?: number;
+    objectFit?: "cover" | "contain";
+    objectPosition?: "center" | "top" | "bottom";
+}
+
 /**
  * ProtectedImage Component
  * - Encrypts / decodes image bitmaps in-memory and renders onto an HTML5 Canvas.
@@ -14,11 +25,11 @@ export default function ProtectedImage({
     canvasClassName = "",
     width,
     height,
-    objectFit = "cover", // 'cover' | 'contain'
+    objectFit = "cover",
     objectPosition = "center",
-}) {
-    const canvasRef = useRef(null);
-    const [isLoaded, setIsLoaded] = useState(false);
+}: ProtectedImageProps) {
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
     useEffect(() => {
         let isCancelled = false;
@@ -35,7 +46,7 @@ export default function ProtectedImage({
             // Tamper-proof canvas extraction methods (anti-scraping)
             try {
                 canvas.toDataURL = () => "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
-                canvas.toBlob = (callback) => {
+                canvas.toBlob = (callback: BlobCallback) => {
                     if (callback) callback(new Blob([], { type: "image/png" }));
                 };
             } catch {
@@ -114,4 +125,3 @@ export default function ProtectedImage({
         </div>
     );
 }
-

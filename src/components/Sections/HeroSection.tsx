@@ -7,7 +7,7 @@ import { scrollToSection } from "../../utils/scrollHelper";
 import ProtectedImage from "../ProtectedImage";
 
 export default function HeroSection() {
-    const heroRef = useRef(null);
+    const heroRef = useRef<HTMLElement | null>(null);
 
     useEffect(() => {
         const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -84,7 +84,7 @@ export default function HeroSection() {
         return () => ctx.revert();
     }, []);
 
-    const scrollTo = (id) => {
+    const scrollTo = (id: string) => {
         scrollToSection(id, -75);
     };
 
@@ -242,7 +242,7 @@ export default function HeroSection() {
                                 </div>
                             </div>
 
-                            {/* Main Portrait Frame - Clean, Crisp & Unobstructed */}
+                            {/* Main Portrait Frame */}
                             <div className="relative w-full rounded-2xl overflow-hidden bg-[#111114] border border-[#29292F] shadow-2xl group transition-all duration-300 hover:border-[#FF6A00]/40">
                                 <div className="aspect-[4/5] overflow-hidden">
                                     <ProtectedImage

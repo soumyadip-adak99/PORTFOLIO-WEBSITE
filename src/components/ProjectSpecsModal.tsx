@@ -1,8 +1,15 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink, Layers, CheckCircle2, ShieldCheck, Database, Server, Cpu } from "lucide-react";
 import { FiGithub } from "react-icons/fi";
+import { Project } from "../types";
 
-export default function ProjectSpecsModal({ project, isOpen, onClose }) {
+interface ProjectSpecsModalProps {
+    project: Project | null;
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+export default function ProjectSpecsModal({ project, isOpen, onClose }: ProjectSpecsModalProps) {
     if (!isOpen || !project) return null;
 
     const hasLive = Boolean(project.liveUrl);
@@ -40,9 +47,11 @@ export default function ProjectSpecsModal({ project, isOpen, onClose }) {
                     {/* Header */}
                     <div className="space-y-2 mb-6 pr-10">
                         <div className="flex items-center gap-2">
-                            <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#FF6A00]/10 text-[#FF6A00] border border-[#FF6A00]/25 font-semibold">
-                                {project.status}
-                            </span>
+                            {project.status && (
+                                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#FF6A00]/10 text-[#FF6A00] border border-[#FF6A00]/25 font-semibold">
+                                    {project.status}
+                                </span>
+                            )}
                             <span className="text-xs font-mono text-[#71717A]">
                                 {project.category}
                             </span>
@@ -50,9 +59,11 @@ export default function ProjectSpecsModal({ project, isOpen, onClose }) {
                         <h3 className="text-2xl font-bold text-[#F5F5F5] tracking-tight">
                             {project.title}
                         </h3>
-                        <p className="text-xs sm:text-sm font-mono text-[#FF8C42]">
-                            {project.subtitle}
-                        </p>
+                        {project.subtitle && (
+                            <p className="text-xs sm:text-sm font-mono text-[#FF8C42]">
+                                {project.subtitle}
+                            </p>
+                        )}
                     </div>
 
                     {/* Architectural Overview */}

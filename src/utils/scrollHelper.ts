@@ -3,7 +3,7 @@
  * Uses native hardware-accelerated smooth scrolling with prefers-reduced-motion support
  */
 
-export const scrollToSection = (targetId, offset = -75) => {
+export const scrollToSection = (targetId: string, offset: number = -75): void => {
     const el = document.getElementById(targetId);
     if (!el) return;
 
@@ -16,11 +16,10 @@ export const scrollToSection = (targetId, offset = -75) => {
     });
 };
 
-export const scrollToTop = () => {
+export const scrollToTop = (): void => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     window.scrollTo({
         top: 0,
         behavior: prefersReducedMotion ? "auto" : "smooth",
     });
 };
-
