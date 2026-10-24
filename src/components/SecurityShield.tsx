@@ -74,7 +74,7 @@ export default function SecurityShield() {
                 triggerBlackout(3500);
             }
 
-            // 5. DevTools shortcuts (F12, Ctrl+Shift+I/J/C/P, Ctrl+U)
+            // 5. DevTools & Network inspection shortcuts (F12, Ctrl+Shift+I/J/C/E/P, Ctrl+U)
             if (
                 e.key === "F12" ||
                 e.keyCode === 123 ||
@@ -86,12 +86,15 @@ export default function SecurityShield() {
                         e.key === "j" ||
                         e.key === "C" ||
                         e.key === "c" ||
+                        e.key === "E" ||
+                        e.key === "e" ||
                         e.key === "P" ||
                         e.key === "p")) ||
                 ((e.ctrlKey || e.metaKey) && (e.key === "u" || e.key === "U"))
             ) {
                 e.preventDefault();
-                triggerBlackout(2000);
+                e.stopPropagation();
+                triggerBlackout(3000);
             }
         };
 

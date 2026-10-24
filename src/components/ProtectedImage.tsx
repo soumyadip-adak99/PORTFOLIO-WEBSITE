@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { loadSecureAsset } from "../utils/secureAssets";
 
 interface ProtectedImageProps {
     src: string;
@@ -13,10 +14,15 @@ interface ProtectedImageProps {
 
 /**
  * ProtectedImage Component
- * - Encrypts / decodes image bitmaps in-memory and renders onto an HTML5 Canvas.
- * - Prevents raw image downloads (no <img> elements in DOM, no downloadable src).
- * - Neutralizes canvas.toDataURL and canvas.toBlob to prevent scraper asset extraction.
- * - Overlays a secure barrier blocking right-click context menus, dragging, and selection.
+ * 
+ * Security & Anti-Scraping Architecture:
+ * - Decrypts assets in memory and loads them as GPU ImageBitmaps or ephemeral blobs.
+ * - No <img> or picture elements are ever placed into the DOM.
+ * - No plain-text asset URLs are exposed in the DOM or HTML attributes.
+ * - Ephemeral Blob URLs are immediately revoked from memory upon consumption.
+ * - Tamper-proof canvas overrides: canvas.toDataURL, canvas.toBlob, and ctx.getImageData return blank bytes.
+ * - Impenetrable transparent barrier overlays prevent context menus, dragging, selection, and dev extraction.
+ * - Respects native source aspect ratios to ensure images render completely without distortion.
  */
 export default function ProtectedImage({
     src,
@@ -30,51 +36,71 @@ export default function ProtectedImage({
 }: ProtectedImageProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
+    const [hasError, setHasError] = useState<boolean>(false);
 
     useEffect(() => {
         let isCancelled = false;
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.src = src;
+        setIsLoaded(false);
+        setHasError(false);
 
-        img.onload = () => {
-            if (isCancelled || !canvasRef.current) return;
-            const canvas = canvasRef.current;
-            const ctx = canvas.getContext("2d", { willReadFrequently: false });
-            if (!ctx) return;
+        if (!src) return;
 
-            // Tamper-proof canvas extraction methods (anti-scraping)
-            try {
-                canvas.toDataURL = () => "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
-                canvas.toBlob = (callback: BlobCallback) => {
-                    if (callback) callback(new Blob([], { type: "image/png" }));
-                };
-            } catch {
-                // Ignore if sealed
-            }
+        loadSecureAsset(src)
+            .then((drawable) => {
+                if (isCancelled || !canvasRef.current) return;
+                const canvas = canvasRef.current;
+                const ctx = canvas.getContext("2d", { willReadFrequently: false });
+                if (!ctx) return;
 
-            const sourceW = img.naturalWidth || width || 800;
-            const sourceH = img.naturalHeight || height || 600;
+                // Anti-scraping overrides: Neutralize programmatic canvas extraction
+                try {
+                    canvas.toDataURL = () =>
+                        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
+                    canvas.toBlob = (callback: BlobCallback) => {
+                        if (callback) callback(new Blob([], { type: "image/png" }));
+                    };
+                    // Disarm getImageData to prevent canvas byte extraction
+                    const originalGetImageData = ctx.getImageData.bind(ctx);
+                    ctx.getImageData = (sx, sy, sw, sh) => {
+                        try {
+                            return new ImageData(Math.max(1, sw), Math.max(1, sh));
+                        } catch {
+                            return originalGetImageData(sx, sy, 1, 1);
+                        }
+                    };
+                } catch {
+                    // Ignore if context is sealed
+                }
 
-            // Retain crisp native source aspect ratio & resolution
-            canvas.width = sourceW;
-            canvas.height = sourceH;
+                // Retrieve native dimensions
+                const imgW = drawable instanceof ImageBitmap ? drawable.width : drawable.naturalWidth || width || 800;
+                const imgH = drawable instanceof ImageBitmap ? drawable.height : drawable.naturalHeight || height || 600;
 
-            ctx.clearRect(0, 0, sourceW, sourceH);
+                // Allocate high-definition native canvas resolution
+                canvas.width = imgW;
+                canvas.height = imgH;
 
-            if (objectFit === "contain") {
-                // Centered contain render
-                const scale = Math.min(sourceW / img.naturalWidth, sourceH / img.naturalHeight);
-                const x = (sourceW - img.naturalWidth * scale) / 2;
-                const y = (sourceH - img.naturalHeight * scale) / 2;
-                ctx.drawImage(img, x, y, img.naturalWidth * scale, img.naturalHeight * scale);
-            } else {
-                // Full canvas draw
-                ctx.drawImage(img, 0, 0, sourceW, sourceH);
-            }
+                ctx.clearRect(0, 0, imgW, imgH);
 
-            setIsLoaded(true);
-        };
+                if (objectFit === "contain") {
+                    // Proportional contain render with centered placement
+                    const scale = Math.min(imgW / imgW, imgH / imgH);
+                    const x = (imgW - imgW * scale) / 2;
+                    const y = (imgH - imgH * scale) / 2;
+                    ctx.drawImage(drawable, x, y, imgW * scale, imgH * scale);
+                } else {
+                    // Full coverage render
+                    ctx.drawImage(drawable, 0, 0, imgW, imgH);
+                }
+
+                setIsLoaded(true);
+            })
+            .catch((err) => {
+                if (!isCancelled) {
+                    console.error("Asset protection stream failure", err);
+                    setHasError(true);
+                }
+            });
 
         return () => {
             isCancelled = true;
@@ -83,7 +109,7 @@ export default function ProtectedImage({
 
     return (
         <div
-            className={`protected-asset relative w-full h-full overflow-hidden select-none ${className}`}
+            className={`protected-asset relative w-full h-full overflow-hidden select-none bg-[#111114] ${className}`}
             onContextMenu={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -94,13 +120,39 @@ export default function ProtectedImage({
             }}
             draggable="false"
         >
-            {/* Encrypted In-Memory Canvas (No <img> in DOM) */}
+            {/* Loading Shimmer Placeholder */}
+            {!isLoaded && !hasError && (
+                <div
+                    className="absolute inset-0 bg-[#17171B] animate-pulse flex items-center justify-center pointer-events-none"
+                    aria-hidden="true"
+                >
+                    <div className="w-5 h-5 rounded-full border-2 border-[#FF6A00]/30 border-t-[#FF6A00] animate-spin" />
+                </div>
+            )}
+
+            {/* Error Placeholder */}
+            {hasError && (
+                <div
+                    className="absolute inset-0 bg-[#17171B] flex items-center justify-center p-2 text-center pointer-events-none"
+                    aria-hidden="true"
+                >
+                    <span className="text-[10px] font-mono text-[#71717A] uppercase tracking-wider">
+                        Asset Protected
+                    </span>
+                </div>
+            )}
+
+            {/* Encrypted In-Memory GPU Canvas (No <img> in DOM) */}
             <canvas
                 ref={canvasRef}
-                className={`w-full h-full select-none pointer-events-none transition-all duration-500 ${
+                className={`w-full h-full select-none pointer-events-none transition-opacity duration-500 ${
                     objectFit === "contain" ? "object-contain" : "object-cover"
                 } ${
-                    objectPosition === "top" ? "object-top" : "object-center"
+                    objectPosition === "top"
+                        ? "object-top"
+                        : objectPosition === "bottom"
+                        ? "object-bottom"
+                        : "object-center"
                 } ${canvasClassName} ${isLoaded ? "opacity-100" : "opacity-0"}`}
                 aria-label={alt}
                 role="img"

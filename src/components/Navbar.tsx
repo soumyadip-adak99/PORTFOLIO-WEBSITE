@@ -4,7 +4,7 @@ import { X, Menu, ArrowUpRight } from "lucide-react";
 import { FiGithub, FiLinkedin } from "react-icons/fi";
 
 import { scrollToSection, scrollToTop } from "../utils/scrollHelper";
-import LOGO_IMG from "../assets/logo.png";
+import { SECURE_ASSETS } from "../utils/secureAssets";
 import ProtectedImage from "./ProtectedImage";
 
 interface NavItem {
@@ -114,7 +114,7 @@ export default function Navbar() {
                     >
                         <div className="w-10 h-10 rounded-xl bg-[#17171B] border border-[#29292F] group-hover:border-[#FF6A00]/50 flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_16px_rgba(255,106,0,0.25)] p-1.5 overflow-hidden">
                             <ProtectedImage
-                                src={LOGO_IMG}
+                                src={SECURE_ASSETS.LOGO}
                                 alt="Soumyadip Adak Logo"
                                 width={72}
                                 height={72}

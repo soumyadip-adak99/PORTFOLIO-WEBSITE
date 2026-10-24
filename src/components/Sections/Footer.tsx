@@ -1,7 +1,7 @@
 import { ArrowUp } from "lucide-react";
 import { FiGithub, FiLinkedin, FiTwitter } from "react-icons/fi";
 import { scrollToTop } from "../../utils/scrollHelper";
-import LOGO_IMG from "../../assets/logo.png";
+import { SECURE_ASSETS } from "../../utils/secureAssets";
 import ProtectedImage from "../ProtectedImage";
 
 export default function Footer() {
@@ -25,7 +25,7 @@ export default function Footer() {
                 <div className="flex items-center gap-3.5">
                     <div className="w-9 h-9 rounded-xl bg-[#17171B] border border-[#29292F] flex items-center justify-center p-1.5 overflow-hidden shadow-md">
                         <ProtectedImage
-                            src={LOGO_IMG}
+                            src={SECURE_ASSETS.LOGO}
                             alt="Soumyadip Adak Logo"
                             width={64}
                             height={64}

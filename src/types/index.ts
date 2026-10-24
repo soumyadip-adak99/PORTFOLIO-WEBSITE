@@ -107,7 +107,3 @@ export interface TechGlobeItem {
 
 export type Theme = "dark" | "light";
 
-export interface ThemeContextType {
-    isDarkMode: boolean;
-    toggleDarkMode: (value?: Theme) => void;
-}

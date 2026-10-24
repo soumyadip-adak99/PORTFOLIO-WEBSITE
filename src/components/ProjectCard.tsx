@@ -15,7 +15,7 @@ export default function ProjectCard({ project, onOpenSpecs }: ProjectCardProps) 
     return (
         <article className="group rounded-2xl bg-[#17171B] border border-[#29292F] hover:border-[#FF6A00]/40 transition-all duration-300 flex flex-col h-full overflow-hidden shadow-lg hover:shadow-[0_12px_36px_-6px_rgba(255,106,0,0.18)] hover:-translate-y-1">
             {/* Visual Header / Technical Screenshot Window */}
-            <div className="relative aspect-[16/10] bg-[#111114] overflow-hidden border-b border-[#29292F]/60">
+            <div className="relative aspect-[16/9] bg-[#111114] overflow-hidden border-b border-[#29292F]/60">
                 {/* Technical Window Chrome Bar */}
                 <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#0B0B0D]/85 backdrop-blur-md border border-[#29292F]/80">
                     <span className="w-2 h-2 rounded-full bg-[#FF5F56]/80" />
@@ -44,7 +44,7 @@ export default function ProjectCard({ project, onOpenSpecs }: ProjectCardProps) 
                     src={project.image}
                     alt={`${project.title} interface preview`}
                     width={1000}
-                    height={625}
+                    height={562}
                     canvasClassName="transition-transform duration-500 ease-out group-hover:scale-105"
                     objectFit="cover"
                     objectPosition="top"

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { JOURNEY_STEPS, PASSIONS } from "../../utils/data";
-import SIGNATURE from "../../assets/signature.png";
+import { SECURE_ASSETS } from "../../utils/secureAssets";
 import { ArrowUpRight } from "lucide-react";
 import { scrollToSection } from "../../utils/scrollHelper";
 import ProtectedImage from "../ProtectedImage";
@@ -96,10 +96,10 @@ export default function AboutSection() {
                             </span>
                             <div className="w-56 h-16 mb-2 flex items-center justify-center">
                                 <ProtectedImage
-                                    src={SIGNATURE}
+                                    src={SECURE_ASSETS.SIGNATURE}
                                     alt="Soumyadip Adak signature"
-                                    width={448}
-                                    height={134}
+                                    width={500}
+                                    height={150}
                                     canvasClassName="brightness-125 contrast-125 drop-shadow-[0_0_12px_rgba(255,106,0,0.2)]"
                                     objectFit="contain"
                                 />

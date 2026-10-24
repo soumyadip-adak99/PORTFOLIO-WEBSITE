@@ -15,13 +15,7 @@ import {
 
 import { FiGithub, FiLinkedin, FiTwitter, FiFacebook, FiInstagram } from "react-icons/fi";
 
-import PROJECT_IMG_CODEMIND from "../assets/banner_project.webp";
-import PROJECT_IMG_1 from "../assets/project-1.webp";
-import PROJECT_IMG_2 from "../assets/project-2.webp";
-import PROJECT_IMG_3 from "../assets/project-3.webp";
-import PROJECT_IMG_4 from "../assets/project-4.webp";
-import PROJECT_IMG_5 from "../assets/project-5.webp";
-import PROJECT_IMG_6 from "../assets/project-6.webp";
+import { SECURE_ASSETS } from "./secureAssets";
 
 import {
     SkillCategory,
@@ -113,7 +107,7 @@ export const PROJECTS: Project[] = [
         subtitle: "AI-Ready Knowledge Base & RAG Engine for GitHub Repositories",
         description:
             "Architected a semantic codebase intelligence platform with Spring Boot 4, Spring AI, and PostgreSQL pgvector. Authenticates via GitHub OAuth2, crawls and chunks repository source code, computes high-dimensional vector embeddings, and enables natural-language RAG retrieval.",
-        image: PROJECT_IMG_CODEMIND,
+        image: SECURE_ASSETS.BANNER_PROJECT,
         featured: true,
         category: "Full Stack",
         stackCategory: "Spring Boot & AI",
@@ -144,7 +138,7 @@ export const PROJECTS: Project[] = [
         subtitle: "Full-Stack Publishing Platform with AI Quality Inspection",
         description:
             "Architected a scalable content platform with Spring Boot RESTful microservices and MongoDB persistence, paired with a reactive React frontend and automated AI analysis pipelines.",
-        image: PROJECT_IMG_1,
+        image: SECURE_ASSETS.PROJECT_1,
         featured: true,
         category: "Full Stack",
         stackCategory: "Java & Spring Boot",
@@ -171,7 +165,7 @@ export const PROJECTS: Project[] = [
         subtitle: "Automated Image Segmentation & Blob Processing Service",
         description:
             "Engineered an image processing microservice in Java and Spring Boot with asynchronous image memory buffers, PostgreSQL relational tracking, and a fluid client interface.",
-        image: PROJECT_IMG_2,
+        image: SECURE_ASSETS.PROJECT_2,
         featured: true,
         category: "Full Stack",
         stackCategory: "Java & Spring Boot",
@@ -193,7 +187,7 @@ export const PROJECTS: Project[] = [
         subtitle: "Full-Featured MERN Multi-Tier E-Commerce System",
         description:
             "Architected an e-commerce infrastructure with Express.js routing, MongoDB document models, JWT session authentication, and transactional shopping cart state management.",
-        image: PROJECT_IMG_6,
+        image: SECURE_ASSETS.PROJECT_6,
         featured: false,
         category: "Web App",
         stackCategory: "MERN Stack",
@@ -215,7 +209,7 @@ export const PROJECTS: Project[] = [
         subtitle: "Disease Triage & Doctor Recommendation Model",
         description:
             "Machine learning-assisted medical diagnosis and doctor recommendation system integrating Python Flask prediction endpoints with responsive clinical triage interfaces.",
-        image: PROJECT_IMG_3,
+        image: SECURE_ASSETS.PROJECT_3,
         featured: false,
         category: "AI & ML",
         stackCategory: "Python & AI",
@@ -237,7 +231,7 @@ export const PROJECTS: Project[] = [
         subtitle: "Real-Time Personal Analytics & Wealth Dashboard",
         description:
             "High-performance personal financial analytics web application featuring dynamic budget tracking, visual expenditure charts, and zero-latency reactive calculation engines.",
-        image: PROJECT_IMG_5,
+        image: SECURE_ASSETS.PROJECT_5,
         featured: false,
         category: "Web App",
         stackCategory: "React & Analytics",
@@ -251,28 +245,6 @@ export const PROJECTS: Project[] = [
         highlights: ["Real-Time Metrics", "Budget Forecasting", "Zero-Latency UI"],
         liveUrl: "https://financeflow-ebon.vercel.app/",
         githubUrl: "https://github.com/soumyadip-adak99/PERSONAL_EXPENSE_TRACKER",
-        status: "Production Live",
-    },
-    {
-        id: 7,
-        title: "Software Engineer Portfolio",
-        subtitle: "High-Performance Portfolio & 3D Interactive Console",
-        description:
-            "Modern software engineer portfolio built with React 19, Vite, and hardware-accelerated GPU animations, achieving sub-millisecond scroll latency and dark technical aesthetics.",
-        image: PROJECT_IMG_4,
-        featured: false,
-        category: "Web App",
-        stackCategory: "React & Performance",
-        techDetails: {
-            backend: "Cloudflare Edge CDN",
-            frontend: "React 19, Tailwind CSS, Framer Motion",
-            database: "Static Pre-Compiled Assets",
-            architecture: "60/120Hz Hardware Scrolling, GPU Layering",
-        },
-        tags: ["React 19", "Tailwind CSS", "Vite", "Performance"],
-        highlights: ["Sub-ms Scroll Latency", "3D Interactive Orbit", "Dark Design System"],
-        liveUrl: "https://soumyadip-adak.pages.dev/",
-        githubUrl: "https://github.com/soumyadip-adak99/React_JS/tree/main/protfolio",
         status: "Production Live",
     },
 ];

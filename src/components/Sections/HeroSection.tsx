@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
-import PROFILE_PIC from "../../assets/profile.webp";
+import { SECURE_ASSETS } from "../../utils/secureAssets";
 import { scrollToSection } from "../../utils/scrollHelper";
 import ProtectedImage from "../ProtectedImage";
 
@@ -244,12 +244,12 @@ export default function HeroSection() {
 
                             {/* Main Portrait Frame */}
                             <div className="relative w-full rounded-2xl overflow-hidden bg-[#111114] border border-[#29292F] shadow-2xl group transition-all duration-300 hover:border-[#FF6A00]/40">
-                                <div className="aspect-[4/5] overflow-hidden">
+                                <div className="aspect-[800/919] overflow-hidden">
                                     <ProtectedImage
-                                        src={PROFILE_PIC}
+                                        src={SECURE_ASSETS.PROFILE}
                                         alt="Soumyadip Adak"
                                         width={800}
-                                        height={1000}
+                                        height={919}
                                         canvasClassName="transition-transform duration-700 ease-out group-hover:scale-105"
                                         objectFit="cover"
                                         objectPosition="center"
