@@ -345,7 +345,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
     {
         name: "Instagram",
         icon: FiInstagram,
-        url: "https://www.instagram.com/soumyadip_adak8888/",
+        url: "https://www.instagram.com/soumya.dip.adak/",
         color: "hover:text-orange-400",
         bgColor: "hover:bg-orange-500/10",
     },
