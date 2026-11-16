@@ -12,7 +12,7 @@ export default function Footer() {
             href: "https://www.linkedin.com/in/soumyadip-adak-a19b03281/",
             label: "LinkedIn",
         },
-        { icon: FiTwitter, href: "https://twitter.com", label: "Twitter" },
+        // { icon: FiTwitter, href: "https://twitter.com", label: "Twitter" },
     ];
 
     return (

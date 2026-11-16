@@ -321,13 +321,13 @@ export const SOCIAL_LINKS: SocialLink[] = [
         color: "hover:text-orange-400",
         bgColor: "hover:bg-orange-500/10",
     },
-    {
-        name: "Twitter",
-        icon: FiTwitter,
-        url: "https://twitter.com",
-        color: "hover:text-orange-400",
-        bgColor: "hover:bg-orange-500/10",
-    },
+    // {
+    //     name: "Twitter",
+    //     icon: FiTwitter,
+    //     url: "https://twitter.com",
+    //     color: "hover:text-orange-400",
+    //     bgColor: "hover:bg-orange-500/10",
+    // },
     {
         name: "Email",
         icon: Mail,
@@ -335,13 +335,13 @@ export const SOCIAL_LINKS: SocialLink[] = [
         color: "hover:text-orange-400",
         bgColor: "hover:bg-orange-500/10",
     },
-    {
-        name: "Facebook",
-        icon: FiFacebook,
-        url: "https://www.facebook.com/soumyadip.adak.99",
-        color: "hover:text-orange-400",
-        bgColor: "hover:bg-orange-500/10",
-    },
+    // {
+    //     name: "Facebook",
+    //     icon: FiFacebook,
+    //     url: "https://www.facebook.com/soumyadip.adak.99",
+    //     color: "hover:text-orange-400",
+    //     bgColor: "hover:bg-orange-500/10",
+    // },
     {
         name: "Instagram",
         icon: FiInstagram,
