@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 import { useState, useRef, FormEvent } from "react";
 import { Send, Clock, ArrowUpRight } from "lucide-react";
 import TextInput from "../Input/TextInput";
 import SuccessModal from "../SuccessModal";
 import { CONTACT_INFO, SOCIAL_LINKS } from "../../utils/data";
 import emailjs from "@emailjs/browser";
+=======
+import emailjs from "@emailjs/browser";
+import { ArrowUpRight, Clock, Send } from "lucide-react";
+import { FormEvent, useRef, useState } from "react";
+import { CONTACT_INFO, SOCIAL_LINKS } from "../../utils/data";
+import TextInput from "../Input/TextInput";
+import SuccessModal from "../SuccessModal";
+>>>>>>> 5e167a9 (update)
 
 interface ContactFormData {
     name: string;

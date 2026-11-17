@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, Menu, ArrowUpRight } from "lucide-react";
+=======
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight, Menu, X } from "lucide-react";
+import { useEffect, useState } from "react";
+>>>>>>> 5e167a9 (update)
 import { FiGithub, FiLinkedin } from "react-icons/fi";
 
 import { scrollToSection, scrollToTop } from "../utils/scrollHelper";

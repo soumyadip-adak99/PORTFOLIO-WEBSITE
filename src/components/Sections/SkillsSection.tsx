@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 import { useRef } from "react";
 import TechGlobe from "../TechGlobe";
 import ArchitectureMatrix from "../ArchitectureMatrix";
 import { Cpu, Terminal } from "lucide-react";
+=======
+import { Cpu, Terminal } from "lucide-react";
+import { useRef } from "react";
+import ArchitectureMatrix from "../ArchitectureMatrix";
+import TechGlobe from "../TechGlobe";
+>>>>>>> 5e167a9 (update)
 
 export default function SkillsSection() {
     const sectionRef = useRef<HTMLElement | null>(null);

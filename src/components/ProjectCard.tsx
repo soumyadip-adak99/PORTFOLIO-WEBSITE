@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 import { ExternalLink, Sparkles, Layers, CheckCircle2 } from "lucide-react";
 import { FiGithub } from "react-icons/fi";
 import ProtectedImage from "./ProtectedImage";
 import { Project } from "../types";
+=======
+import { CheckCircle2, ExternalLink, Layers, Sparkles } from "lucide-react";
+import { FiGithub } from "react-icons/fi";
+import { Project } from "../types";
+import ProtectedImage from "./ProtectedImage";
+>>>>>>> 5e167a9 (update)
 
 interface ProjectCardProps {
     project: Project;

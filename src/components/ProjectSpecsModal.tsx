@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink, Layers, CheckCircle2, ShieldCheck, Database, Server, Cpu } from "lucide-react";
+=======
+import { AnimatePresence, motion } from "framer-motion";
+import { CheckCircle2, Cpu, Database, ExternalLink, Layers, Server, ShieldCheck, X } from "lucide-react";
+>>>>>>> 5e167a9 (update)
 import { FiGithub } from "react-icons/fi";
 import { Project } from "../types";
 

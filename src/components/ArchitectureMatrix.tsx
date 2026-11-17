@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from "react";
 import {
     SiSpringboot,
@@ -23,6 +24,33 @@ import {
     Layers,
 } from "lucide-react";
 import { StackPillar, PipelineStep, TechnologyItem } from "../types";
+=======
+import {
+    Cloud,
+    Code2,
+    Database,
+    Layers,
+    Server,
+    Workflow,
+} from "lucide-react";
+import { useState } from "react";
+import { FaAws, FaJava } from "react-icons/fa";
+import {
+    SiDocker,
+    SiGit,
+    SiJavascript,
+    SiMongodb,
+    SiMysql,
+    SiNodedotjs,
+    SiPostgresql,
+    SiReact,
+    SiRedis,
+    SiSpringboot,
+    SiTailwindcss,
+    SiTypescript,
+} from "react-icons/si";
+import { PipelineStep, StackPillar, TechnologyItem } from "../types";
+>>>>>>> 5e167a9 (update)
 
 const STACK_PILLARS: StackPillar[] = [
     {

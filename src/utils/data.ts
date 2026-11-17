@@ -13,7 +13,11 @@ import {
     MapPin,
 } from "lucide-react";
 
+<<<<<<< HEAD
 import { FiGithub, FiLinkedin, FiTwitter, FiFacebook, FiInstagram } from "react-icons/fi";
+=======
+import { FiGithub, FiLinkedin, FiInstagram } from "react-icons/fi";
+>>>>>>> 5e167a9 (update)
 
 import { SECURE_ASSETS } from "./secureAssets";
 
@@ -34,9 +38,27 @@ export const SKILLS_CATEGORY: SkillCategory[] = [
         description: "Crafting beautiful, responsive user interfaces",
         skills: [
             { name: "React", level: 85, color: "bg-gradient-to-r from-orange-500 to-amber-400" },
+<<<<<<< HEAD
             { name: "Tailwind CSS", level: 90, color: "bg-gradient-to-r from-amber-500 to-orange-500" },
             { name: "TypeScript", level: 65, color: "bg-gradient-to-r from-orange-600 to-amber-400" },
             { name: "JavaScript / ES6+", level: 90, color: "bg-gradient-to-r from-amber-400 to-orange-500" },
+=======
+            {
+                name: "Tailwind CSS",
+                level: 90,
+                color: "bg-gradient-to-r from-amber-500 to-orange-500",
+            },
+            {
+                name: "TypeScript",
+                level: 65,
+                color: "bg-gradient-to-r from-orange-600 to-amber-400",
+            },
+            {
+                name: "JavaScript / ES6+",
+                level: 90,
+                color: "bg-gradient-to-r from-amber-400 to-orange-500",
+            },
+>>>>>>> 5e167a9 (update)
         ],
     },
 
@@ -45,9 +67,27 @@ export const SKILLS_CATEGORY: SkillCategory[] = [
         icon: Server,
         description: "Building robust, scalable server-side solutions",
         skills: [
+<<<<<<< HEAD
             { name: "Spring Boot", level: 90, color: "bg-gradient-to-r from-orange-500 to-amber-500" },
             { name: "REST APIs", level: 92, color: "bg-gradient-to-r from-amber-500 to-orange-400" },
             { name: "Node.js & Express", level: 75, color: "bg-gradient-to-r from-orange-600 to-amber-500" },
+=======
+            {
+                name: "Spring Boot",
+                level: 90,
+                color: "bg-gradient-to-r from-orange-500 to-amber-500",
+            },
+            {
+                name: "REST APIs",
+                level: 92,
+                color: "bg-gradient-to-r from-amber-500 to-orange-400",
+            },
+            {
+                name: "Node.js & Express",
+                level: 75,
+                color: "bg-gradient-to-r from-orange-600 to-amber-500",
+            },
+>>>>>>> 5e167a9 (update)
         ],
     },
 
@@ -58,7 +98,15 @@ export const SKILLS_CATEGORY: SkillCategory[] = [
         skills: [
             { name: "MongoDB", level: 85, color: "bg-gradient-to-r from-orange-500 to-amber-400" },
             { name: "MySQL", level: 75, color: "bg-gradient-to-r from-amber-500 to-orange-500" },
+<<<<<<< HEAD
             { name: "PostgreSQL", level: 70, color: "bg-gradient-to-r from-orange-600 to-amber-400" },
+=======
+            {
+                name: "PostgreSQL",
+                level: 70,
+                color: "bg-gradient-to-r from-orange-600 to-amber-400",
+            },
+>>>>>>> 5e167a9 (update)
         ],
     },
 
@@ -67,10 +115,29 @@ export const SKILLS_CATEGORY: SkillCategory[] = [
         icon: Cloud,
         description: "Streamlining deployment and version workflows",
         skills: [
+<<<<<<< HEAD
             { name: "AWS Cloud", level: 80, color: "bg-gradient-to-r from-amber-500 to-orange-500" },
             { name: "Docker", level: 80, color: "bg-gradient-to-r from-amber-500 to-orange-500" },
             { name: "Git & GitHub", level: 95, color: "bg-gradient-to-r from-orange-500 to-amber-400" },
             { name: "Vercel & Cloudflare", level: 85, color: "bg-gradient-to-r from-orange-600 to-amber-500" },
+=======
+            {
+                name: "AWS Cloud",
+                level: 80,
+                color: "bg-gradient-to-r from-amber-500 to-orange-500",
+            },
+            { name: "Docker", level: 80, color: "bg-gradient-to-r from-amber-500 to-orange-500" },
+            {
+                name: "Git & GitHub",
+                level: 95,
+                color: "bg-gradient-to-r from-orange-500 to-amber-400",
+            },
+            {
+                name: "Vercel & Cloudflare",
+                level: 85,
+                color: "bg-gradient-to-r from-orange-600 to-amber-500",
+            },
+>>>>>>> 5e167a9 (update)
         ],
     },
 ];
@@ -117,7 +184,20 @@ export const PROJECTS: Project[] = [
             database: "PostgreSQL 16 + pgvector (HNSW Indexing, Cosine Distance)",
             architecture: "OAuth2 Flow, TokenTextSplitter, Async ThreadPool, Vector Embeddings",
         },
+<<<<<<< HEAD
         tags: ["Spring Boot", "Spring AI", "pgvector", "RAG", "Next.js", "Docker", "PostgreSQL", "GitHub API"],
+=======
+        tags: [
+            "Spring Boot",
+            "Spring AI",
+            "pgvector",
+            "RAG",
+            "Next.js",
+            "Docker",
+            "PostgreSQL",
+            "GitHub API",
+        ],
+>>>>>>> 5e167a9 (update)
         highlights: [
             "GitHub OAuth2 & Repository Sync Pipeline",
             "AST Code Chunker & Vector Embeddings",
@@ -149,7 +229,15 @@ export const PROJECTS: Project[] = [
             architecture: "RESTful Microservices, JWT Auth, AI Analysis & RAG",
         },
         tags: ["Spring Boot", "React", "MongoDB", "AI Scanner", "RAG", "REST APIs"],
+<<<<<<< HEAD
         highlights: ["Microservice Architecture", "Real-Time AI Inspection", "Document Persistence"],
+=======
+        highlights: [
+            "Microservice Architecture",
+            "Real-Time AI Inspection",
+            "Document Persistence",
+        ],
+>>>>>>> 5e167a9 (update)
         flagshipMetrics: [
             "Spring Boot Microservices",
             "MongoDB Atlas Document Store",
@@ -178,7 +266,12 @@ export const PROJECTS: Project[] = [
         tags: ["Java", "Spring Boot", "PostgreSQL", "Image Processing"],
         highlights: ["Relational Schema Design", "Async Processing", "High-Fidelity Output"],
         liveUrl: "",
+<<<<<<< HEAD
         githubUrl: "https://github.com/soumyadip-adak99/Remove-image-background-spring-boot-project/",
+=======
+        githubUrl:
+            "https://github.com/soumyadip-adak99/Remove-image-background-spring-boot-project/",
+>>>>>>> 5e167a9 (update)
         status: "Open Source",
     },
     {
@@ -297,12 +390,22 @@ export const PASSIONS: Passion[] = [
     {
         icon: Coffee,
         title: "Problem Solving",
+<<<<<<< HEAD
         description: "Turning complex architectural challenges into elegant, maintainable solutions",
+=======
+        description:
+            "Turning complex architectural challenges into elegant, maintainable solutions",
+>>>>>>> 5e167a9 (update)
     },
     {
         icon: BookOpen,
         title: "Continuous Innovation",
+<<<<<<< HEAD
         description: "Constantly exploring new tech stacks, performance patterns, and modern design",
+=======
+        description:
+            "Constantly exploring new tech stacks, performance patterns, and modern design",
+>>>>>>> 5e167a9 (update)
     },
 ];
 
@@ -321,6 +424,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
         color: "hover:text-orange-400",
         bgColor: "hover:bg-orange-500/10",
     },
+<<<<<<< HEAD
     // {
     //     name: "Twitter",
     //     icon: FiTwitter,
@@ -328,6 +432,8 @@ export const SOCIAL_LINKS: SocialLink[] = [
     //     color: "hover:text-orange-400",
     //     bgColor: "hover:bg-orange-500/10",
     // },
+=======
+>>>>>>> 5e167a9 (update)
     {
         name: "Email",
         icon: Mail,
@@ -335,6 +441,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
         color: "hover:text-orange-400",
         bgColor: "hover:bg-orange-500/10",
     },
+<<<<<<< HEAD
     // {
     //     name: "Facebook",
     //     icon: FiFacebook,
@@ -346,6 +453,12 @@ export const SOCIAL_LINKS: SocialLink[] = [
         name: "Instagram",
         icon: FiInstagram,
         url: "https://www.instagram.com/soumya.dip.adak/",
+=======
+    {
+        name: "Instagram",
+        icon: FiInstagram,
+        url: "https://www.instagram.com/soumyadip_adak8888/",
+>>>>>>> 5e167a9 (update)
         color: "hover:text-orange-400",
         bgColor: "hover:bg-orange-500/10",
     },
