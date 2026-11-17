@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 import { useState, useRef } from "react";
-=======
 import {
     CheckCircle2,
     ChevronDown,
@@ -13,31 +11,12 @@ import {
     Server,
     Sparkles,
 } from "lucide-react";
-import { useRef, useState } from "react";
 import { FiGithub } from "react-icons/fi";
 import { Project } from "../../types";
->>>>>>> 5e167a9 (update)
 import { PROJECTS } from "../../utils/data";
 import ProjectCard from "../ProjectCard";
 import ProjectSpecsModal from "../ProjectSpecsModal";
 import ProtectedImage from "../ProtectedImage";
-<<<<<<< HEAD
-import {
-    FolderGit2,
-    Sparkles,
-    ExternalLink,
-    Server,
-    Database,
-    Layers,
-    CheckCircle2,
-    Cpu,
-    ChevronDown,
-    ChevronUp,
-} from "lucide-react";
-import { FiGithub } from "react-icons/fi";
-import { Project } from "../../types";
-=======
->>>>>>> 5e167a9 (update)
 
 export default function ProjectsSection() {
     const [activeCategory, setActiveCategory] = useState<string>("All");

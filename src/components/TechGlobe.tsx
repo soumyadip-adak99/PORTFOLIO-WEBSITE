@@ -1,26 +1,5 @@
-<<<<<<< HEAD
 import { useState, useEffect, useRef, useCallback } from "react";
-import {
-    SiSpringboot,
-    SiReact,
-    SiJavascript,
-    SiTypescript,
-    SiPython,
-    SiPostgresql,
-    SiMysql,
-    SiMongodb,
-    SiDocker,
-    SiGit,
-    SiRedis,
-    SiNodedotjs,
-    SiExpress,
-    SiTailwindcss,
-} from "react-icons/si";
-import { FaJava, FaAws } from "react-icons/fa";
-import { Sparkles, Compass } from "lucide-react";
-=======
 import { Compass, Sparkles } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { FaAws, FaJava } from "react-icons/fa";
 import {
     SiDocker,
@@ -38,7 +17,6 @@ import {
     SiTailwindcss,
     SiTypescript,
 } from "react-icons/si";
->>>>>>> 5e167a9 (update)
 import { TechGlobeItem } from "../types";
 
 const TECHNOLOGIES: TechGlobeItem[] = [

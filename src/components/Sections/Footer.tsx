@@ -1,9 +1,5 @@
 import { ArrowUp } from "lucide-react";
-<<<<<<< HEAD
-import { FiGithub, FiLinkedin, FiTwitter } from "react-icons/fi";
-=======
 import { FiGithub, FiLinkedin } from "react-icons/fi";
->>>>>>> 5e167a9 (update)
 import { scrollToTop } from "../../utils/scrollHelper";
 import { SECURE_ASSETS } from "../../utils/secureAssets";
 import ProtectedImage from "../ProtectedImage";
@@ -16,10 +12,6 @@ export default function Footer() {
             href: "https://www.linkedin.com/in/soumyadip-adak-a19b03281/",
             label: "LinkedIn",
         },
-<<<<<<< HEAD
-        // { icon: FiTwitter, href: "https://twitter.com", label: "Twitter" },
-=======
->>>>>>> 5e167a9 (update)
     ];
 
     return (
@@ -28,11 +20,7 @@ export default function Footer() {
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-[1px] bg-gradient-to-r from-transparent via-[#FF6A00]/50 to-transparent" />
 
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
-<<<<<<< HEAD
                 {/* Brand & Identity */}
-=======
-                {/* Brand & Identity */}O
->>>>>>> 5e167a9 (update)
                 <div className="flex items-center gap-3.5">
                     <div className="w-9 h-9 rounded-xl bg-[#17171B] border border-[#29292F] flex items-center justify-center p-1.5 overflow-hidden shadow-md">
                         <ProtectedImage
@@ -79,11 +67,7 @@ export default function Footer() {
             {/* Copyright & Signoff */}
             <div className="max-w-7xl mx-auto mt-10 pt-6 border-t border-[#1F1F24] flex items-center justify-center text-xs font-mono text-[#71717A]">
                 <div>
-<<<<<<< HEAD
-                    © {new Date().getFullYear()} Soumyadip Adak. All rights reserved.
-=======
                     © {new Date().getFullYear()} Soumyadip Adak. Made with ❤️ by Soumyadip Adak.
->>>>>>> 5e167a9 (update)
                 </div>
             </div>
         </footer>

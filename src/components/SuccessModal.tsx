@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { motion, AnimatePresence } from "framer-motion";
-=======
-import { AnimatePresence, motion } from "framer-motion";
->>>>>>> 5e167a9 (update)
 import { CheckCircle2, X } from "lucide-react";
 
 interface SuccessModalProps {

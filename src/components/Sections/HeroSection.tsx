@@ -1,18 +1,9 @@
-<<<<<<< HEAD
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
-import { SECURE_ASSETS } from "../../utils/secureAssets";
-import { scrollToSection } from "../../utils/scrollHelper";
-=======
-import gsap from "gsap";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
-import { useEffect, useRef } from "react";
-import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
 import { scrollToSection } from "../../utils/scrollHelper";
 import { SECURE_ASSETS } from "../../utils/secureAssets";
->>>>>>> 5e167a9 (update)
 import ProtectedImage from "../ProtectedImage";
 
 export default function HeroSection() {
