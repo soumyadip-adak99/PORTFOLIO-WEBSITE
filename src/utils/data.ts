@@ -11,9 +11,9 @@ import {
     Cloud,
     Mail,
     MapPin,
-} from "lucide-react";
+} from "lucide-vue-next";
 
-import { FiGithub, FiLinkedin, FiInstagram } from "react-icons/fi";
+import { FiGithub, FiLinkedin, FiInstagram } from "../components/Icons";
 
 import { SECURE_ASSETS } from "./secureAssets";
 

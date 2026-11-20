@@ -1,22 +1,15 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import { createApp } from "vue";
+import "lenis/dist/lenis.css";
 import "./index.css";
-import App from "./App";
-import SmoothScroll from "./components/SmoothScroll";
+import App from "./App.vue";
 
-// Locate mount container (disguised semantic viewport, no 'root' element)
 const mountTarget =
     document.getElementById("app-viewport") ||
     document.querySelector("main") ||
     document.body;
 
-createRoot(mountTarget).render(
-    <StrictMode>
-        <SmoothScroll>
-            <App />
-        </SmoothScroll>
-    </StrictMode>
-);
+const app = createApp(App);
+app.mount(mountTarget);
 
 // Obfuscate / Disguise Runtime Signature in Console
 if (typeof window !== "undefined") {
