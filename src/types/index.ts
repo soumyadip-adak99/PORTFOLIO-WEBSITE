@@ -1,4 +1,4 @@
-import { ComponentType } from "react";
+import type { Component } from "vue";
 
 export interface SkillItem {
     name: string;
@@ -8,7 +8,7 @@ export interface SkillItem {
 
 export interface SkillCategory {
     title: string;
-    icon: ComponentType<{ size?: number; className?: string }>;
+    icon: Component | any;
     description: string;
     skills: SkillItem[];
 }
@@ -48,26 +48,26 @@ export interface JourneyStep {
     title: string;
     company: string;
     description: string;
-    icon: ComponentType<{ size?: number; className?: string }>;
+    icon: Component | any;
     color: string;
 }
 
 export interface Passion {
-    icon: ComponentType<{ size?: number; className?: string }>;
+    icon: Component | any;
     title: string;
     description: string;
 }
 
 export interface SocialLink {
     name: string;
-    icon: ComponentType<{ size?: number; className?: string }>;
+    icon: Component | any;
     url: string;
     color: string;
     bgColor: string;
 }
 
 export interface ContactInfo {
-    icon: ComponentType<{ size?: number; className?: string }>;
+    icon: Component | any;
     label: string;
     value: string;
 }
@@ -76,14 +76,14 @@ export interface TechnologyItem {
     name: string;
     spec: string;
     tier: string;
-    icon: ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>;
+    icon: Component | any;
     color: string;
     project: string;
 }
 
 export interface StackPillar {
     title: string;
-    icon: ComponentType<{ size?: number; className?: string }>;
+    icon: Component | any;
     color: string;
     accent: string;
     technologies: TechnologyItem[];
@@ -100,10 +100,9 @@ export interface TechGlobeItem {
     name: string;
     category: string;
     level: string;
-    icon: ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>;
+    icon: Component | any;
     color: string;
     description: string;
 }
 
 export type Theme = "dark" | "light";
-

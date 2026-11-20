@@ -1,9 +1,9 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import vue from "@vitejs/plugin-vue";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-    plugins: [react(), tailwindcss()],
+    plugins: [vue(), tailwindcss()],
     build: {
         chunkSizeWarningLimit: 1000,
         rollupOptions: {
@@ -12,10 +12,10 @@ export default defineConfig({
                 chunkFileNames: "assets/system-[hash].js",
                 assetFileNames: "assets/theme-[hash].[ext]",
                 manualChunks(id: string) {
-                    if (id.includes("framer-motion") || id.includes("gsap")) {
+                    if (id.includes("gsap")) {
                         return "motion-engine";
                     }
-                    if (id.includes("lucide-react") || id.includes("react-icons")) {
+                    if (id.includes("lucide-vue-next")) {
                         return "vector-glyphs";
                     }
                 },

@@ -3,7 +3,7 @@
  * Uses native hardware-accelerated smooth scrolling with prefers-reduced-motion support
  */
 
-export const scrollToSection = (targetId: string, offset: number = -75): void => {
+export const scrollToSection = (targetId: string, offset: number = -80): void => {
     const el = document.getElementById(targetId);
     if (!el) return;
 

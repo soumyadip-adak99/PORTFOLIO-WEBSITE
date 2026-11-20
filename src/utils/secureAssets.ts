@@ -17,8 +17,14 @@ const VAULT_KEY = "SYMD-ADAK-SECURITY-VAULT-2026";
  */
 export function decryptAsset(cipherText: string): string {
     if (!cipherText) return "";
-    // If already raw data URI or http URL, return as-is
-    if (cipherText.startsWith("data:") || cipherText.startsWith("http://") || cipherText.startsWith("https://")) {
+    // If already raw path, data URI or http URL, return as-is
+    if (
+        cipherText.startsWith("/") ||
+        cipherText.startsWith("./") ||
+        cipherText.startsWith("data:") ||
+        cipherText.startsWith("http://") ||
+        cipherText.startsWith("https://")
+    ) {
         return cipherText;
     }
 
@@ -40,7 +46,7 @@ export function decryptAsset(cipherText: string): string {
  */
 export const SECURE_ASSETS = {
     BANNER_PROJECT: encryptedVault.banner_project,
-    LOGO: encryptedVault.logo,
+    LOGO: "/logo.png",
     PROFILE: encryptedVault.profile,
     PROJECT_1: encryptedVault.project_1,
     PROJECT_2: encryptedVault.project_2,
@@ -76,15 +82,15 @@ export async function loadSecureAsset(cipherOrUrl: string): Promise<ImageBitmap 
             throw new Error("Asset decryption failed");
         }
 
-        // 1. If it's a data URI (such as project_4), load via image element
-        if (decryptedSource.startsWith("data:")) {
+        // 1. If it's a local static asset or data URI, load directly via HTMLImageElement
+        if (decryptedSource.startsWith("/") || decryptedSource.startsWith("./") || decryptedSource.startsWith("data:")) {
             return new Promise<HTMLImageElement>((resolve, reject) => {
                 const img = new Image();
                 img.onload = () => {
                     assetBitmapCache.set(cipherOrUrl, img);
                     resolve(img);
                 };
-                img.onerror = () => reject(new Error("Data URI render failure"));
+                img.onerror = () => reject(new Error("Local asset render failure"));
                 img.src = decryptedSource;
             });
         }
