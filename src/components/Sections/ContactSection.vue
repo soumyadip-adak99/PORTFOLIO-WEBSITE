@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import emailjs from "@emailjs/browser";
-import { ArrowUpRight, Clock, Send } from "lucide-vue-next";
-import { CONTACT_INFO, SOCIAL_LINKS } from "../../utils/data";
-import TextInput from "../Input/TextInput.vue";
+import { Clock, Send, MapPin, Mail, ArrowUpRight, AlertCircle } from "lucide-vue-next";
+import { FiGithub, FiLinkedin, FiInstagram } from "../Icons";
 import SuccessModal from "../SuccessModal.vue";
 
 interface ContactFormData {
@@ -43,40 +42,46 @@ const handleSubmit = async () => {
   const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
   try {
-    if (serviceId && templateId && publicKey) {
-      await emailjs.send(
-        serviceId,
-        templateId,
-        {
-          from_name: formData.value.name,
-          name: formData.value.name,
-          from_email: formData.value.email,
-          email: formData.value.email,
-          reply_to: formData.value.email,
-          message: formData.value.message,
-          to_name: "Soumyadip Adak",
-        },
-        publicKey
-      );
-    } else {
-      console.warn(
-        "EmailJS credentials missing in .env (VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_EMAILJS_PUBLIC_KEY). Simulating successful transmission."
+    if (!serviceId || !templateId || !publicKey) {
+      throw new Error(
+        "EmailJS credentials missing in .env (VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_EMAILJS_PUBLIC_KEY). Please configure your .env file."
       );
     }
 
-    showSuccess.value = true;
-    formData.value = { name: "", email: "", message: "" };
-    setTimeout(() => {
-      showSuccess.value = false;
-    }, 4500);
+    const templateParams = {
+      from_name: formData.value.name,
+      name: formData.value.name,
+      user_name: formData.value.name,
+      from_email: formData.value.email,
+      email: formData.value.email,
+      user_email: formData.value.email,
+      reply_to: formData.value.email,
+      message: formData.value.message,
+      to_name: "Soumyadip Adak",
+    };
+
+    const response = await emailjs.send(
+      serviceId,
+      templateId,
+      templateParams,
+      publicKey
+    );
+
+    if (response.status === 200 || response.text === "OK") {
+      showSuccess.value = true;
+      formData.value = { name: "", email: "", message: "" };
+      setTimeout(() => {
+        showSuccess.value = false;
+      }, 5000);
+    } else {
+      throw new Error(`EmailJS status ${response.status}: ${response.text}`);
+    }
   } catch (err: any) {
-    console.error("EmailJS Error:", err);
-    // If EmailJS failed due to invalid IDs, give a soft fallback for demonstration
-    showSuccess.value = true;
-    formData.value = { name: "", email: "", message: "" };
-    setTimeout(() => {
-      showSuccess.value = false;
-    }, 4500);
+    console.error("EmailJS Transmission Error:", err);
+    submitError.value =
+      err?.text ||
+      err?.message ||
+      "Failed to deliver transmission. Please verify that your Email Service is active in your EmailJS Dashboard.";
   } finally {
     isSubmitting.value = false;
   }
@@ -111,112 +116,209 @@ const handleSubmit = async () => {
         </p>
       </div>
 
-      <div class="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-        <!-- Left: Contact Form (7 cols) -->
-        <div class="lg:col-span-7 p-8 sm:p-10 rounded-3xl bg-[#17171B] border border-[#29292F] shadow-2xl relative">
-          <div class="flex items-center justify-between mb-8 pb-4 border-b border-[#29292F]/60">
-            <h3 class="text-xl font-bold text-[#F5F5F5] tracking-tight">
-              Transmit Inquiry
-            </h3>
-            <span class="text-xs font-mono text-[#71717A]">
-              Encrypted Channel
-            </span>
+      <div class="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+        <!-- Left Column: Contact Form (7 cols) -->
+        <div class="lg:col-span-7 p-7 sm:p-9 rounded-3xl bg-[#111114] border border-[#26262B] shadow-2xl relative">
+          <!-- Form Header -->
+          <div class="flex items-start justify-between mb-8">
+            <div>
+              <h3 class="text-xl sm:text-2xl font-bold text-[#F5F5F5] tracking-tight">
+                Send Direct Message
+              </h3>
+              <p class="text-xs text-[#71717A] mt-1 font-sans">
+                Typically responded to within 24 hours
+              </p>
+            </div>
+
+            <!-- Active Status Badge -->
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111114] border border-[#FF6A00]/40 text-xs font-medium text-[#FF6A00] shrink-0">
+              <Clock :size="12" class="text-[#FF6A00]" />
+              <span>Active</span>
+            </div>
+          </div>
+
+          <!-- Error Alert Banner -->
+          <div
+            v-if="submitError"
+            class="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-mono flex items-start justify-between gap-3"
+          >
+            <div class="flex items-start gap-2.5">
+              <AlertCircle :size="16" class="shrink-0 mt-0.5 text-red-400" />
+              <span>{{ submitError }}</span>
+            </div>
+            <button
+              type="button"
+              @click="submitError = null"
+              class="text-red-400 hover:text-red-300 font-bold text-sm leading-none"
+            >
+              &times;
+            </button>
           </div>
 
           <form @submit.prevent="handleSubmit" class="space-y-6">
-            <TextInput
-              v-model="formData.name"
-              label="Full Name / Entity"
-              placeholder="e.g. John Doe / Tech Corp"
-            />
+            <!-- 2-Column Row: Full Name & Email Address -->
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div class="space-y-2 text-left">
+                <label class="block text-[10px] font-mono uppercase tracking-widest text-[#71717A] font-semibold">
+                  FULL NAME
+                </label>
+                <input
+                  v-model="formData.name"
+                  type="text"
+                  placeholder="Your name or company"
+                  class="w-full px-4 py-3 rounded-xl bg-[#0B0B0D] border border-[#26262B] text-[#F5F5F5] placeholder-[#52525B] text-sm focus:outline-none focus:border-[#FF6A00]/60 transition-colors"
+                />
+              </div>
 
-            <TextInput
-              v-model="formData.email"
-              label="Direct Email"
-              placeholder="e.g. john@enterprise.com"
-            />
+              <div class="space-y-2 text-left">
+                <label class="block text-[10px] font-mono uppercase tracking-widest text-[#71717A] font-semibold">
+                  EMAIL ADDRESS
+                </label>
+                <input
+                  v-model="formData.email"
+                  type="email"
+                  placeholder="your.email@domain.com"
+                  class="w-full px-4 py-3 rounded-xl bg-[#0B0B0D] border border-[#26262B] text-[#F5F5F5] placeholder-[#52525B] text-sm focus:outline-none focus:border-[#FF6A00]/60 transition-colors"
+                />
+              </div>
+            </div>
 
-            <TextInput
-              v-model="formData.message"
-              label="Transmission / Project Brief"
-              placeholder="Detail your system requirements, engineering goals, or inquiry..."
-              :textarea="true"
-            />
+            <!-- Full-Width Row: Project Details / Message -->
+            <div class="space-y-2 text-left">
+              <label class="block text-[10px] font-mono uppercase tracking-widest text-[#71717A] font-semibold">
+                PROJECT DETAILS / MESSAGE
+              </label>
+              <textarea
+                v-model="formData.message"
+                rows="4"
+                placeholder="Describe your project, timeline, or inquiries..."
+                class="w-full px-4 py-3.5 rounded-xl bg-[#0B0B0D] border border-[#26262B] text-[#F5F5F5] placeholder-[#52525B] text-sm focus:outline-none focus:border-[#FF6A00]/60 transition-colors resize-none"
+              />
+            </div>
 
+            <!-- Submit Button -->
             <button
               type="submit"
               :disabled="!isFormValid || isSubmitting"
               :class="[
-                'w-full py-4 rounded-xl font-semibold text-xs uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 shadow-lg cursor-pointer',
+                'w-full py-4 px-6 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 transition-all duration-200 cursor-pointer',
                 isFormValid && !isSubmitting
-                  ? 'bg-[#FF6A00] hover:bg-[#FF8C42] text-white glow-orange-button'
-                  : 'bg-[#1F1F24] text-[#71717A] cursor-not-allowed border border-[#29292F]'
+                  ? 'bg-[#FF6A00] hover:bg-[#FF8C42] text-white glow-orange-button shadow-lg shadow-orange-500/20'
+                  : 'bg-[#17171B] text-[#71717A] border border-[#26262B] cursor-not-allowed'
               ]"
             >
-              <template v-if="isSubmitting">
-                <div class="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                <span>Transmitting Data...</span>
-              </template>
-              <template v-else>
-                <span>Send Message</span>
-                <Send :size="15" />
-              </template>
+              <Send :size="14" :class="{ 'animate-pulse': isSubmitting }" />
+              <span>{{ isSubmitting ? "TRANSMITTING..." : "SEND MESSAGE" }}</span>
             </button>
           </form>
         </div>
 
-        <!-- Right: Contact Dossier & Social Portals (5 cols) -->
-        <div class="lg:col-span-5 space-y-8">
-          <!-- Information Card -->
-          <div class="p-8 rounded-3xl bg-[#17171B] border border-[#29292F] shadow-xl space-y-6">
-            <h3 class="text-xl font-bold text-[#F5F5F5] tracking-tight">
-              Direct Contact Dossier
-            </h3>
-
-            <div class="space-y-4">
-              <div
-                v-for="info in CONTACT_INFO"
-                :key="info.label"
-                class="p-4 rounded-2xl bg-[#111114] border border-[#29292F] flex items-center gap-4"
-              >
-                <div class="p-3 rounded-xl bg-[#17171B] border border-[#29292F] text-[#FF6A00] shrink-0">
-                  <component :is="info.icon" :size="20" />
-                </div>
-                <div>
-                  <div class="text-[11px] font-mono text-[#71717A] uppercase tracking-wider">
-                    {{ info.label }}
-                  </div>
-                  <div class="text-sm font-semibold text-[#F5F5F5] mt-0.5 select-all">
-                    {{ info.value }}
-                  </div>
-                </div>
-              </div>
+        <!-- Right Column: Coordinates & Online Channels (5 cols) -->
+        <div class="lg:col-span-5 space-y-4">
+          <!-- 1. Open for Engagement Status Card -->
+          <div class="p-6 rounded-2xl bg-[#111114] border border-[#26262B] space-y-2">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] animate-pulse" />
+              <h4 class="text-sm font-bold text-[#F5F5F5]">
+                Open for Engagement
+              </h4>
             </div>
+            <p class="text-xs text-[#8A8A93] leading-relaxed">
+              Available for software engineer positions, contract development, and technical consulting.
+            </p>
+          </div>
 
-            <!-- Availability SLA Indicator -->
-            <div class="pt-4 border-t border-[#29292F]/60 flex items-center gap-3 text-xs font-mono text-[#A1A1AA]">
-              <Clock :size="15" class="text-[#FF8C42] shrink-0" />
-              <span>Response Turnaround: Typically &lt; 24 Business Hours</span>
+          <!-- 2. Location Coordinate Card -->
+          <div class="p-4 sm:p-5 rounded-2xl bg-[#111114] border border-[#26262B] flex items-center gap-4 hover:border-[#FF6A00]/40 transition-colors">
+            <div class="w-10 h-10 rounded-xl bg-[#17171B] border border-[#26262B] flex items-center justify-center text-[#FF6A00] shrink-0">
+              <MapPin :size="18" />
+            </div>
+            <div class="min-w-0">
+              <div class="text-[10px] font-mono uppercase tracking-widest text-[#71717A] font-semibold">
+                LOCATION
+              </div>
+              <div class="text-sm font-semibold text-[#F5F5F5] truncate mt-0.5">
+                West Bengal, India
+              </div>
             </div>
           </div>
 
-          <!-- Network & Social Channels -->
-          <div class="p-8 rounded-3xl bg-[#17171B] border border-[#29292F] shadow-xl space-y-4">
-            <h4 class="text-xs font-mono uppercase tracking-widest text-[#71717A]">
-              Connect Across the Web
+          <!-- 3. Direct Email Card -->
+          <a
+            href="mailto:work.soumyadipadak@gmail.com"
+            class="p-4 sm:p-5 rounded-2xl bg-[#111114] border border-[#26262B] flex items-center gap-4 hover:border-[#FF6A00]/40 transition-colors group"
+          >
+            <div class="w-10 h-10 rounded-xl bg-[#17171B] border border-[#26262B] flex items-center justify-center text-[#FF6A00] shrink-0 group-hover:scale-105 transition-transform">
+              <Mail :size="18" />
+            </div>
+            <div class="min-w-0">
+              <div class="text-[10px] font-mono uppercase tracking-widest text-[#71717A] font-semibold">
+                EMAIL
+              </div>
+              <div class="text-sm font-semibold text-[#F5F5F5] group-hover:text-[#FF6A00] transition-colors truncate mt-0.5">
+                work.soumyadipadak@gmail.com
+              </div>
+            </div>
+          </a>
+
+          <!-- 4. Verified Channels Grid -->
+          <div class="space-y-3 pt-1">
+            <h4 class="text-[10px] font-mono uppercase tracking-widest text-[#71717A] font-semibold">
+              VERIFIED CHANNELS
             </h4>
             <div class="grid grid-cols-2 gap-3">
+              <!-- GitHub -->
               <a
-                v-for="link in SOCIAL_LINKS"
-                :key="link.name"
-                :href="link.url"
+                href="https://github.com/soumyadip-adak99"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="p-3.5 rounded-xl bg-[#111114] border border-[#29292F] hover:border-[#FF6A00]/40 flex items-center gap-3 text-xs font-mono text-[#D4D4D8] hover:text-[#FF6A00] transition-colors group cursor-pointer"
+                class="p-3.5 rounded-xl bg-[#111114] border border-[#26262B] hover:border-[#FF6A00]/40 hover:bg-[#17171B] text-[#D4D4D8] hover:text-white flex items-center justify-between transition-all duration-200 group"
               >
-                <component :is="link.icon" :size="16" class="text-[#A1A1AA] group-hover:text-[#FF6A00] transition-colors" />
-                <span class="truncate">{{ link.name }}</span>
-                <ArrowUpRight :size="12" class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-[#FF6A00]" />
+                <div class="flex items-center gap-2.5">
+                  <FiGithub :size="16" class="text-[#FF6A00]" />
+                  <span class="text-xs font-semibold">GitHub</span>
+                </div>
+                <ArrowUpRight :size="13" class="text-[#71717A] group-hover:text-[#FF6A00] transition-colors" />
+              </a>
+
+              <!-- LinkedIn -->
+              <a
+                href="https://www.linkedin.com/in/soumyadip-adak-a19b03281/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="p-3.5 rounded-xl bg-[#111114] border border-[#26262B] hover:border-[#FF6A00]/40 hover:bg-[#17171B] text-[#D4D4D8] hover:text-white flex items-center justify-between transition-all duration-200 group"
+              >
+                <div class="flex items-center gap-2.5">
+                  <FiLinkedin :size="16" class="text-[#FF6A00]" />
+                  <span class="text-xs font-semibold">LinkedIn</span>
+                </div>
+                <ArrowUpRight :size="13" class="text-[#71717A] group-hover:text-[#FF6A00] transition-colors" />
+              </a>
+
+              <!-- Email -->
+              <a
+                href="mailto:work.soumyadipadak@gmail.com"
+                class="p-3.5 rounded-xl bg-[#111114] border border-[#26262B] hover:border-[#FF6A00]/40 hover:bg-[#17171B] text-[#D4D4D8] hover:text-white flex items-center justify-between transition-all duration-200 group"
+              >
+                <div class="flex items-center gap-2.5">
+                  <Mail :size="16" class="text-[#FF6A00]" />
+                  <span class="text-xs font-semibold">Email</span>
+                </div>
+                <ArrowUpRight :size="13" class="text-[#71717A] group-hover:text-[#FF6A00] transition-colors" />
+              </a>
+
+              <!-- Instagram -->
+              <a
+                href="https://www.instagram.com/soumya.dip.adak/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="p-3.5 rounded-xl bg-[#111114] border border-[#26262B] hover:border-[#FF6A00]/40 hover:bg-[#17171B] text-[#D4D4D8] hover:text-white flex items-center justify-between transition-all duration-200 group"
+              >
+                <div class="flex items-center gap-2.5">
+                  <FiInstagram :size="16" class="text-[#FF6A00]" />
+                  <span class="text-xs font-semibold">Instagram</span>
+                </div>
+                <ArrowUpRight :size="13" class="text-[#71717A] group-hover:text-[#FF6A00] transition-colors" />
               </a>
             </div>
           </div>
@@ -224,9 +326,9 @@ const handleSubmit = async () => {
       </div>
     </div>
 
-    <!-- Transmission Success Notification Dialog -->
+    <!-- Success Modal Teleport -->
     <SuccessModal
-      :show-success="showSuccess"
+      :is-open="showSuccess"
       @close="showSuccess = false"
     />
   </section>
