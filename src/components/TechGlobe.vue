@@ -55,6 +55,7 @@ const TECHNOLOGIES: TechGlobeItem[] = [
   },
   {
     name: "JavaScript (ES6+)",
+    shortName: "JavaScript",
     category: "Core Language",
     level: "Expert",
     icon: SiJavascript,
@@ -71,6 +72,7 @@ const TECHNOLOGIES: TechGlobeItem[] = [
   },
   {
     name: "PostgreSQL",
+    shortName: "Postgres",
     category: "Relational DB",
     level: "Advanced",
     icon: SiPostgresql,
@@ -143,6 +145,7 @@ const TECHNOLOGIES: TechGlobeItem[] = [
   },
   {
     name: "Tailwind CSS",
+    shortName: "Tailwind",
     category: "Styling Architecture",
     level: "Expert",
     icon: SiTailwindcss,
@@ -172,6 +175,8 @@ let lastMousePos = { x: 0, y: 0 };
 let isDragging = false;
 let animFrameId: number | null = null;
 let radius = 175;
+let perspective = 520;
+const isMobile = ref(false);
 let baseCoords: SphereCoord[] = [];
 
 // Fibonacci sphere base coordinates
@@ -195,12 +200,21 @@ const computeBaseCoords = () => {
 const updateSize = () => {
   if (!containerRef.value) return;
   const w = containerRef.value.clientWidth;
-  if (w < 400) {
-    radius = 135;
+  isMobile.value = w < 640;
+
+  // Responsive radius & perspective carefully tuned to prevent clipping on mobile screens
+  if (w < 360) {
+    radius = 82;
+    perspective = 380;
+  } else if (w < 440) {
+    radius = 96;
+    perspective = 420;
   } else if (w < 640) {
-    radius = 155;
+    radius = 120;
+    perspective = 460;
   } else {
-    radius = 185;
+    radius = 175;
+    perspective = 520;
   }
 };
 
@@ -246,8 +260,9 @@ const handleTouchMove = (e: TouchEvent) => {
   const dx = clientX - lastMousePos.x;
   const dy = clientY - lastMousePos.y;
 
-  if (Math.abs(dx) > Math.abs(dy)) {
-    targetRotY += dx * 0.007;
+  // Only handle horizontal rotation; let vertical touch motions scroll natively
+  if (Math.abs(dx) > Math.abs(dy) * 1.2) {
+    targetRotY += dx * 0.006;
     lastMousePos = { x: clientX, y: clientY };
   }
 };
@@ -257,7 +272,6 @@ onMounted(() => {
   updateSize();
   window.addEventListener("resize", updateSize, { passive: true });
 
-  const perspective = 520;
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const updatePositions = () => {
@@ -292,11 +306,23 @@ onMounted(() => {
       const zIndex = Math.round(depthNorm * 100);
 
       const isHovered = hoveredTechName === tech.name;
-      const finalScale = (isHovered ? scale * 1.35 : scale) * (0.8 + depthNorm * 0.35);
+      const finalScale = (isHovered ? scale * 1.3 : scale) * (0.8 + depthNorm * 0.35);
 
+      // Hardware-accelerated 3D transform
       el.style.transform = `translate3d(${projX.toFixed(1)}px, ${projY.toFixed(1)}px, 0px) scale(${finalScale.toFixed(3)})`;
-      el.style.opacity = isHovered ? "1" : opacity.toFixed(2);
-      el.style.zIndex = isHovered ? "200" : String(zIndex);
+
+      // Avoid DOM style thrashing: only update zIndex & opacity if changed
+      const zIndexStr = isHovered ? "200" : String(zIndex);
+      if (el.dataset.z !== zIndexStr) {
+        el.style.zIndex = zIndexStr;
+        el.dataset.z = zIndexStr;
+      }
+
+      const opStr = isHovered ? "1" : opacity.toFixed(2);
+      if (el.dataset.op !== opStr) {
+        el.style.opacity = opStr;
+        el.dataset.op = opStr;
+      }
     }
   };
 
@@ -358,34 +384,34 @@ onMounted(() => {
       @touchstart="handleTouchStart"
       @touchmove="handleTouchMove"
       @touchend="handlePointerUp"
-      class="relative w-full max-w-[540px] h-[460px] sm:h-[500px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none overflow-hidden touch-pan-y"
+      class="relative w-full max-w-[540px] h-[340px] sm:h-[420px] md:h-[480px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none overflow-hidden touch-pan-y"
       style="perspective: 1000px;"
     >
       <!-- Central Soft Orange Atmospheric Glow -->
       <div
-        class="absolute w-[360px] h-[360px] sm:w-[440px] sm:h-[440px] rounded-full pointer-events-none"
+        class="absolute w-[220px] h-[220px] sm:w-[320px] sm:h-[320px] md:w-[420px] md:h-[420px] rounded-full pointer-events-none"
         style="background: radial-gradient(circle at 50% 50%, rgba(255, 106, 0, 0.18) 0%, rgba(255, 120, 30, 0.08) 30%, rgba(255, 140, 66, 0.02) 55%, transparent 72%); transform: translateZ(0);"
       />
       <div
-        class="absolute w-48 h-48 rounded-full pointer-events-none"
+        class="absolute w-32 h-32 sm:w-48 sm:h-48 rounded-full pointer-events-none"
         style="background: radial-gradient(circle at 50% 50%, rgba(255, 106, 0, 0.32) 0%, rgba(255, 130, 40, 0.12) 40%, transparent 70%); transform: translateZ(0);"
       />
 
-      <!-- Concentric Technical Orbital Rings -->
+      <!-- Concentric Technical Orbital Rings (Responsive to avoid mobile overflow) -->
       <div
-        class="absolute w-72 h-72 rounded-full border border-orange-500/10 pointer-events-none animate-[spin_60s_linear_infinite]"
+        class="absolute w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] rounded-full border border-orange-500/10 pointer-events-none animate-[spin_60s_linear_infinite]"
         style="will-change: transform; transform: translateZ(0);"
       />
       <div
-        class="absolute w-96 h-96 rounded-full border border-dashed border-[#29292F]/60 pointer-events-none animate-[spin_90s_linear_infinite_reverse]"
+        class="absolute w-[260px] h-[260px] sm:w-[360px] sm:h-[360px] rounded-full border border-dashed border-[#29292F]/60 pointer-events-none animate-[spin_90s_linear_infinite_reverse]"
         style="will-change: transform; transform: translateZ(0);"
       />
-      <div class="absolute w-[340px] h-[340px] rounded-full border border-orange-500/5 pointer-events-none" />
+      <div class="absolute w-[230px] h-[230px] sm:w-[320px] sm:h-[320px] rounded-full border border-orange-500/5 pointer-events-none" />
 
       <!-- Central Core Hologram Node -->
       <div class="absolute z-10 flex flex-col items-center justify-center pointer-events-none">
-        <div class="w-14 h-14 rounded-2xl bg-[#111114]/95 border border-orange-500/30 flex items-center justify-center shadow-[0_0_25px_rgba(255,106,0,0.25)]">
-          <Sparkles class="w-6 h-6 text-[#FF6A00] animate-pulse" />
+        <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-[#111114]/95 border border-orange-500/30 flex items-center justify-center shadow-[0_0_25px_rgba(255,106,0,0.25)]">
+          <Sparkles class="w-4 h-4 sm:w-6 sm:h-6 text-[#FF6A00] animate-pulse" />
         </div>
       </div>
 
@@ -402,53 +428,53 @@ onMounted(() => {
       >
         <div
           :class="[
-            'flex items-center gap-2 px-3 py-2 rounded-xl transition-all duration-200 border',
+            'flex items-center gap-1.5 sm:gap-2 px-2 py-1 sm:px-3 sm:py-2 rounded-lg sm:rounded-xl transition-all duration-200 border',
             hoveredTech?.name === tech.name
               ? 'bg-[#17171B] border-[#FF6A00] shadow-[0_0_24px_rgba(255,106,0,0.4)] scale-110'
               : 'bg-[#111114]/95 border-[#29292F] hover:border-[#FF6A00]/60 shadow-lg shadow-black/50'
           ]"
         >
           <span
-            class="text-lg transition-transform duration-200 group-hover:scale-110 shrink-0"
+            class="text-sm sm:text-lg transition-transform duration-200 group-hover:scale-110 shrink-0"
             :style="{ color: tech.color }"
           >
-            <component :is="tech.icon" :size="18" />
+            <component :is="tech.icon" :size="isMobile ? 14 : 18" />
           </span>
           <span
             :class="[
-              'text-xs font-medium tracking-tight whitespace-nowrap transition-colors',
+              'text-[10px] sm:text-xs font-medium tracking-tight whitespace-nowrap transition-colors',
               hoveredTech?.name === tech.name ? 'text-[#F5F5F5] font-semibold' : 'text-[#D4D4D8]'
             ]"
           >
-            {{ tech.name }}
+            {{ isMobile && tech.shortName ? tech.shortName : tech.name }}
           </span>
         </div>
       </div>
     </div>
 
     <!-- Selected Tech Card / Inspection HUD -->
-    <div class="w-full max-w-xl min-h-[96px] mt-2 px-4">
+    <div class="w-full max-w-xl min-h-[84px] sm:min-h-[96px] mt-2 px-2 sm:px-4">
       <div
         v-if="hoveredTech"
-        class="p-4 rounded-2xl bg-[#17171B]/95 border border-[#FF6A00]/40 shadow-[0_4px_24px_-4px_rgba(255,106,0,0.2)] flex items-center justify-between gap-4 transition-all duration-200"
+        class="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#17171B]/95 border border-[#FF6A00]/40 shadow-[0_4px_24px_-4px_rgba(255,106,0,0.2)] flex items-center justify-between gap-3 sm:gap-4 transition-all duration-200"
       >
-        <div class="flex items-center gap-3.5 min-w-0">
+        <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
           <div
-            class="w-12 h-12 rounded-xl bg-[#111114] border border-[#29292F] flex items-center justify-center text-2xl shrink-0"
+            class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#111114] border border-[#29292F] flex items-center justify-center shrink-0"
             :style="{ color: hoveredTech.color }"
           >
-            <component :is="hoveredTech.icon" :size="24" />
+            <component :is="hoveredTech.icon" :size="isMobile ? 18 : 24" />
           </div>
           <div class="min-w-0">
-            <div class="flex items-center gap-2">
-              <h4 class="text-base font-semibold text-[#F5F5F5] tracking-tight">
+            <div class="flex items-center gap-1.5 sm:gap-2">
+              <h4 class="text-sm sm:text-base font-semibold text-[#F5F5F5] tracking-tight truncate">
                 {{ hoveredTech.name }}
               </h4>
-              <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-[#FF6A00]/10 text-[#FF6A00] border border-[#FF6A00]/25">
+              <span class="text-[10px] sm:text-[11px] font-mono px-1.5 sm:px-2 py-0.5 rounded-full bg-[#FF6A00]/10 text-[#FF6A00] border border-[#FF6A00]/25 shrink-0">
                 {{ hoveredTech.level }}
               </span>
             </div>
-            <p class="text-xs text-[#A1A1AA] truncate mt-0.5">
+            <p class="text-[11px] sm:text-xs text-[#A1A1AA] truncate mt-0.5">
               {{ hoveredTech.description }}
             </p>
           </div>
@@ -464,10 +490,10 @@ onMounted(() => {
       </div>
       <div
         v-else
-        class="p-4 rounded-2xl bg-[#111114]/80 border border-[#29292F]/60 flex items-center justify-center gap-2 text-xs text-[#A1A1AA]"
+        class="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#111114]/80 border border-[#29292F]/60 flex items-center justify-center gap-2 text-xs text-[#A1A1AA]"
       >
-        <Compass class="w-4 h-4 text-[#FF6A00] animate-spin" style="animation-duration: 12s;" />
-        <span>Hover any technology or drag to rotate the 3D ecosystem</span>
+        <Compass class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FF6A00] animate-spin" style="animation-duration: 12s;" />
+        <span class="text-[11px] sm:text-xs">Touch or hover any skill to inspect discipline details</span>
       </div>
     </div>
   </div>
