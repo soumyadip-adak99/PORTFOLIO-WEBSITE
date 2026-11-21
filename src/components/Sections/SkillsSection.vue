@@ -11,11 +11,11 @@ const sectionRef = ref<HTMLElement | null>(null);
   <section
     id="skills"
     ref="sectionRef"
-    class="py-24 px-6 lg:px-12 relative overflow-hidden"
+    class="py-16 sm:py-24 px-4 sm:px-6 lg:px-12 relative overflow-hidden"
   >
     <div class="max-w-7xl mx-auto relative z-10">
       <!-- Section Header -->
-      <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111114] border border-[#29292F] shadow-sm mb-4">
           <span class="w-2 h-2 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00]" />
           <span class="text-xs uppercase font-mono tracking-widest font-semibold text-[#FF8C42]">
@@ -23,21 +23,21 @@ const sectionRef = ref<HTMLElement | null>(null);
           </span>
         </div>
 
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#F5F5F5] mb-5">
+        <h2 class="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#F5F5F5] mb-4 sm:mb-5">
           Interactive Stack &
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6A00] to-[#FF8C42]">
             Core Competencies
           </span>
         </h2>
 
-        <p class="text-base text-[#A1A1AA] leading-relaxed">
+        <p class="text-sm sm:text-base text-[#A1A1AA] leading-relaxed">
           A focused engineering toolkit centered on scalable enterprise backend architectures,
           distributed databases, and responsive reactive interfaces.
         </p>
       </div>
 
       <!-- 3D Interactive Technology Globe Showcase -->
-      <div class="mb-20 p-6 sm:p-10 rounded-3xl bg-[#111114]/90 border border-[#29292F] backdrop-blur-md relative overflow-hidden shadow-2xl">
+      <div class="mb-14 sm:mb-20 p-2 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl bg-[#111114]/90 border border-[#29292F] backdrop-blur-md relative overflow-hidden shadow-2xl">
         <div
           class="absolute -top-32 -right-32 w-96 h-96 rounded-full pointer-events-none -z-10"
           style="background: radial-gradient(circle at center, rgba(255, 106, 0, 0.08) 0%, rgba(255, 130, 45, 0.03) 40%, transparent 70%); transform: translateZ(0);"

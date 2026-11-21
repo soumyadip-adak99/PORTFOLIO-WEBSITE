@@ -98,6 +98,7 @@ export interface PipelineStep {
 
 export interface TechGlobeItem {
     name: string;
+    shortName?: string;
     category: string;
     level: string;
     icon: Component | any;

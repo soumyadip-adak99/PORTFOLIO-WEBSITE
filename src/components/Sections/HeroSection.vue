@@ -186,7 +186,7 @@ onUnmounted(() => {
               Core Focus:
             </span>
             <span
-              v-for="item in ['Spring Boot', 'Vue', 'React', 'RAG', 'PostgreSQL', 'Docker', 'RESTful APIs']"
+              v-for="item in ['Spring Boot', 'React', 'RAG', 'PostgreSQL', 'Docker', 'RESTful APIs']"
               :key="item"
               class="px-3 py-1 rounded-lg bg-[#111114] border border-[#29292F] text-[#D4D4D8]"
             >

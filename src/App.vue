@@ -9,15 +9,17 @@ let lenis: Lenis | null = null;
 let rafId: number | null = null;
 
 onMounted(() => {
-  // Global buttery smooth momentum scrolling across every mouse wheel, trackpad, and touch scroll
+  // Buttery smooth momentum scrolling for desktop mouse wheel/trackpad,
+  // while preserving native 120Hz hardware inertial scrolling on touch/mobile devices to eliminate scroll lag
   lenis = new Lenis({
-    duration: 1.1,
+    duration: 1.0,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     orientation: "vertical",
     gestureOrientation: "vertical",
     smoothWheel: true,
     wheelMultiplier: 1.0,
-    touchMultiplier: 1.5,
+    touchMultiplier: 0, // Disable synthetic touch scroll on mobile to allow native 120Hz compositor scrolling
+    syncTouch: false,
   });
 
   setLenis(lenis);
